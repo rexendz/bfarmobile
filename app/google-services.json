@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "805267472890",
+    "firebase_url": "https://azizelmer-f6f1f.firebaseio.com",
+    "project_id": "azizelmer-f6f1f",
+    "storage_bucket": "azizelmer-f6f1f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805267472890:android:98fd837797a206292d2443",
+        "android_client_info": {
+          "package_name": "com.adzu.bfarsystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "805267472890-96q52sedemmt8rn07mm95d22k06t3mdg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbm00bZ4rlTPATp7eibPWW31FvPSHj1_o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "805267472890-96q52sedemmt8rn07mm95d22k06t3mdg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
