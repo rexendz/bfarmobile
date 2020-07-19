@@ -105,7 +105,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment1).commit();
                 showSearchView();
                 TextView acct_name = findViewById(R.id.acct_name);
-                acct_name.setText("Logged in as: " + user.getUsername());
+                String loggedin = "Logged in as: " + user.getUsername();
+                acct_name.setText(loggedin);
             }
 
             @Override
@@ -138,16 +139,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void populateCards(){
-        try {
-            fragment1.getOperatorAdapter().setFilter(filter, statusfilter);
-            fragment1.getOperatorAdapter().getFilter().filter(lastSearchText);
-            if (fragment1.getOperatorAdapter().getItemCount() == 0)
-                fragment1.updateTextView(View.VISIBLE);
-            else {
-                fragment1.updateTextView(View.GONE);
+        if(fragment1.getOperatorAdapter() != null) {
+            try {
+                fragment1.getOperatorAdapter().setFilter(filter, statusfilter);
+                fragment1.getOperatorAdapter().getFilter().filter(lastSearchText);
+                if (fragment1.getOperatorAdapter().getItemCount() == 0)
+                    fragment1.updateTextView(View.VISIBLE);
+                else {
+                    fragment1.updateTextView(View.GONE);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e){
-            e.printStackTrace();
         }
     }
 
@@ -169,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         spinner_list.add("All");
         spinner_list.add("Active");
         spinner_list.add("Expired");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, spinner_list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, spinner_list);
         spinner.setAdapter(adapter);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -204,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
             @Override
-            public void onSearchViewShown() {;
+            public void onSearchViewShown() {
                 fragmentContainer.setPadding(0, 280, 0, 0);
                 expandableLayout.expand();
             }
@@ -246,11 +249,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(item.getItemId()){
             case R.id.nav_operatorlist:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment1).commit();
+                fragment1.setActive(true);
                 showSearchView();
                 populateCards();
                 toolbar.setTitle("Fishpond Operators");
                 break;
             case R.id.nav_manageope:
+                fragment1.setActive(false);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment2).commit();
                 hideSearchView();
                 toolbar.setTitle("Add New Operators");

@@ -53,6 +53,7 @@ public class ListFragment extends Fragment {
     private TextView text_main;
     private View view;
     private Timer timer;
+    private boolean isActive;
 
     public ListFragment() {
     }
@@ -63,6 +64,7 @@ public class ListFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        isActive = true;
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
@@ -80,10 +82,12 @@ public class ListFragment extends Fragment {
 
             @Override
             public void run() {
-                ((MainActivity)getActivity()).runOnUiThread(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((MainActivity) getActivity()).populateCards();
+                        if(isActive) {
+                            ((MainActivity) getActivity()).populateCards();
+                        }
                     }
                 });
             }
@@ -120,6 +124,10 @@ public class ListFragment extends Fragment {
         if(timer != null){
             timer.cancel();
         }
+    }
+
+    public void setActive(boolean status){
+        isActive = status;
     }
 
     public OperatorAdapter getOperatorAdapter(){

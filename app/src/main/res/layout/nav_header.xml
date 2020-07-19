@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:text="Logged in as: ELMER"
+        android:text="Logged in as: "
         android:fontFamily="@font/product_sans"
         android:textSize="14sp"
         android:id="@+id/acct_name"
