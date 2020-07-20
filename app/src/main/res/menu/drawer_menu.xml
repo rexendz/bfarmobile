@@ -4,10 +4,10 @@
             <menu>
                 <item android:id="@+id/nav_operatorlist"
                     android:title="Operator List" />
-                <item android:id="@+id/nav_manageacc"
-                    android:title="Manage Accounts" />
                 <item android:id="@+id/nav_manageope"
                     android:title="Add New Operator" />
+                <item android:id="@+id/nav_manageacc"
+                    android:title="Manage Accounts" />
             </menu>
         </item>
         <item android:title="Account">

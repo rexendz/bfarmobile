@@ -16,4 +16,6 @@
 
     <color name="colorActive">#26de81</color>
     <color name="colorExpired">#fc5c65</color>
+    <color name="colorAdmin">#3F51B5</color>
+    <color name="colorOperator">#757575</color>
 </resources>

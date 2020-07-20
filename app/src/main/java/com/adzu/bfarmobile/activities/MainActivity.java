@@ -21,6 +21,7 @@ import com.adzu.bfarmobile.R;
 import com.adzu.bfarmobile.entities.Account;
 import com.adzu.bfarmobile.entities.DatabaseUtil;
 import com.adzu.bfarmobile.entities.OnGetDataListener;
+import com.adzu.bfarmobile.fragments.AccountFragment;
 import com.adzu.bfarmobile.fragments.AddOperatorFragment;
 import com.adzu.bfarmobile.fragments.ListFragment;
 import com.google.android.material.navigation.NavigationView;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String account_key;
     private ListFragment fragment1;
     private AddOperatorFragment fragment2;
+    private AccountFragment fragment3;
     private FrameLayout fragmentContainer;
     private String lastSearchText = "";
     private Toolbar toolbar;
@@ -83,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
         drawer = findViewById(R.id.drawer_layout);
         fragment2 = new AddOperatorFragment();
+        fragment3 = new AccountFragment();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -148,6 +151,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 else {
                     fragment1.updateTextView(View.GONE);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void populateAccountCards(){
+        if(fragment3.getAccountAdapter() != null) {
+            try {
+                fragment3.getAccountAdapter().setFilter(fragment3.getFilter());
+                fragment3.getAccountAdapter().getFilter().filter("");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -248,6 +262,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
             case R.id.nav_operatorlist:
+                fragment3.setActive(false);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment1).commit();
                 fragment1.setActive(true);
                 showSearchView();
@@ -256,13 +271,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_manageope:
                 fragment1.setActive(false);
+                fragment3.setActive(false);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment2).commit();
                 hideSearchView();
                 toolbar.setTitle("Add New Operators");
                 break;
+            case R.id.nav_manageacc:
+                fragment1.setActive(false);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment3).commit();
+                hideSearchView();
+                toolbar.setTitle("Manage Accounts");
+                break;
             case R.id.nav_logout:
                 account_key = "";
                 Toast.makeText(getApplicationContext(), "Logged Out", Toast.LENGTH_LONG).show();
+                fragment1.setActive(false);
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
                 finish();

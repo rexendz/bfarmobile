@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.adzu.bfarmobile.R;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,11 +131,11 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.Operat
         public OperatorViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            text_name = itemView.findViewById(R.id.text_name);
-            text_opnum = itemView.findViewById(R.id.text_opnum);
-            text_status = itemView.findViewById(R.id.text_status);
-            text_address = itemView.findViewById(R.id.text_address);
-            text_flanum = itemView.findViewById(R.id.text_flanum);
+            text_name = itemView.findViewById(R.id.op_name);
+            text_opnum = itemView.findViewById(R.id.op_opnum);
+            text_status = itemView.findViewById(R.id.op_status);
+            text_address = itemView.findViewById(R.id.op_address);
+            text_flanum = itemView.findViewById(R.id.op_flanum);
         }
     }
 

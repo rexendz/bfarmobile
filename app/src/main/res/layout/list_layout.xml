@@ -18,7 +18,7 @@
             android:padding="8dp">
 
             <TextView
-                android:id="@+id/text_opnum"
+                android:id="@+id/op_opnum"
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -33,10 +33,10 @@
                 android:textColor="#000000" />
 
             <TextView
-                android:id="@+id/text_name"
+                android:id="@+id/op_name"
                 android:layout_width="282dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text_opnum"
+                android:layout_below="@+id/op_opnum"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginStart="13dp"
@@ -44,18 +44,16 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="25dp"
                 android:layout_marginRight="25dp"
-                android:layout_toStartOf="@+id/text_status"
-                android:layout_toLeftOf="@+id/text_status"
                 android:fontFamily="@font/product_sans"
                 android:text="Name:"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:textColor="#000000" />
 
             <TextView
-                android:id="@+id/text_address"
+                android:id="@+id/op_address"
                 android:layout_width="379dp"
                 android:layout_height="51dp"
-                android:layout_below="@+id/text_name"
+                android:layout_below="@+id/op_name"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentEnd="true"
@@ -71,7 +69,7 @@
                 android:textColor="#000000" />
 
             <TextView
-                android:id="@+id/text_flanum"
+                android:id="@+id/op_flanum"
                 android:layout_width="141dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -80,17 +78,17 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="27dp"
                 android:layout_marginRight="27dp"
-                android:layout_toStartOf="@+id/text_status"
-                android:layout_toLeftOf="@+id/text_status"
-                android:layout_toEndOf="@+id/text_opnum"
-                android:layout_toRightOf="@+id/text_opnum"
+                android:layout_toStartOf="@+id/op_status"
+                android:layout_toLeftOf="@+id/op_status"
+                android:layout_toEndOf="@+id/op_opnum"
+                android:layout_toRightOf="@+id/op_opnum"
                 android:fontFamily="@font/product_sans"
                 android:text="FLA #: "
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:textColor="#000000" />
 
             <TextView
-                android:id="@+id/text_status"
+                android:id="@+id/op_status"
                 android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"

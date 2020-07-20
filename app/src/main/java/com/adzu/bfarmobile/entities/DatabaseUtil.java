@@ -16,7 +16,7 @@ import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 public class DatabaseUtil {
-    public static void readDataByUsername(String username, DatabaseReference ref, final OnGetDataListener listener) {
+    public static void readDataByUsername(String username, final DatabaseReference ref, final OnGetDataListener listener) {
         listener.onStart();
         Query query = ref.orderByChild("username").equalTo(username);
         query.addChildEventListener(new ChildEventListener() {
@@ -24,6 +24,7 @@ public class DatabaseUtil {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 listener.dataRetrieved(dataSnapshot);
+                ref.removeEventListener(this);
             }
 
             @Override
@@ -60,13 +61,14 @@ public class DatabaseUtil {
         });
     }
 
-    public static void readDataByKey(String account_key, DatabaseReference ref, final OnGetDataListener listener) {
+    public static void readDataByKey(String account_key, final DatabaseReference ref, final OnGetDataListener listener) {
         listener.onStart();
         Query query = ref.orderByKey().equalTo(account_key);
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 listener.dataRetrieved(dataSnapshot);
+                ref.removeEventListener(this);
             }
 
             @Override
@@ -92,13 +94,14 @@ public class DatabaseUtil {
 
     }
 
-    public static void readDataByFLA(long FLA, DatabaseReference ref, final OnGetDataListener listener) {
+    public static void readDataByFLA(long FLA, final DatabaseReference ref, final OnGetDataListener listener) {
         listener.onStart();
         Query query = ref.orderByChild("fla").equalTo(FLA);
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 listener.dataRetrieved(dataSnapshot);
+                ref.removeEventListener(this);
             }
 
             @Override
@@ -127,7 +130,7 @@ public class DatabaseUtil {
     public static void checkConnection(final ConnectivityListener listener) {
         listener.onStart();
         DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
-        connectedRef.addValueEventListener(new ValueEventListener() {
+        connectedRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean connected = snapshot.getValue(Boolean.class);
