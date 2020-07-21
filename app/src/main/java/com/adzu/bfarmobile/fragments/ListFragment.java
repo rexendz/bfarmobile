@@ -82,14 +82,18 @@ public class ListFragment extends Fragment {
 
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(isActive) {
-                            ((MainActivity) getActivity()).populateCards();
+                try {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isActive) {
+                                ((MainActivity) getActivity()).populateCards();
+                            }
                         }
-                    }
-                });
+                    });
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             }
 
         }, 0, 100);
@@ -101,11 +105,18 @@ public class ListFragment extends Fragment {
                 for (DataSnapshot snap : snapshot.getChildren()){
                     operatorList.add(snap.getValue(FishpondOperator.class));
                 }
-                operatorAdapter = new OperatorAdapter(view.getContext(), operatorList);
+                operatorAdapter = new OperatorAdapter(view.getContext(), operatorList, new OperatorAdapter.OperatorTapListener() {
+                    @Override
+                    public void onItemTap(int position, long fla) {
+                        isActive = false;
+                        ((MainActivity)getActivity()).startProfileFragment(fla);
+                    }
+                });
 
                 recyclerView = view.findViewById(R.id.recyclerView);
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
 
 
                 recyclerView.setAdapter(operatorAdapter);

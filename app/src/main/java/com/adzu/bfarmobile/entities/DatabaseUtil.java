@@ -96,7 +96,7 @@ public class DatabaseUtil {
 
     public static void readDataByFLA(long FLA, final DatabaseReference ref, final OnGetDataListener listener) {
         listener.onStart();
-        Query query = ref.orderByChild("fla").equalTo(FLA);
+        Query query = ref.orderByChild("fla_number").equalTo(FLA);
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {

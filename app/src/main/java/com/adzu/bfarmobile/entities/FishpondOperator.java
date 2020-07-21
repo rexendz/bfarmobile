@@ -1,5 +1,9 @@
 package com.adzu.bfarmobile.entities;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 public class FishpondOperator {
 
     private String firstname;
@@ -8,19 +12,40 @@ public class FishpondOperator {
     private long operator_number;
     private long fla_number;
     private String fishpond_size;
-    private String cityprovince;
+    private String cityProvince;
     private String barangay;
     private String municipality;
-    private java.util.Date issuance_date;
-    private java.util.Date expiration_date;
+    private String issuance_date;
+    private String expiration_date;
     private String sim1;
     private String sim2;
     private boolean isActive;
 
     private FishpondRecord[] fishpondRecords;
 
+    public FishpondOperator() {
+
+    }
+
     public FishpondRecord[] getFishpondRecords() {
         return fishpondRecords;
+    }
+
+    public FishpondOperator(Map<String, Object> data){
+        this.firstname = (String) data.get("firstname");
+        this.middlename = (String) data.get("middlename");
+        this.lastname = (String) data.get("lastname");
+        this.operator_number = (long) data.get("operator_number");
+        this.fla_number = (long) data.get("fla_number");
+        this.fishpond_size = (String) data.get("fishpond_size");
+        this.cityProvince = (String) data.get("cityProvince");
+        this.barangay = (String) data.get("barangay");
+        this.municipality = (String) data.get("municipality");
+        this.issuance_date = (String) data.get("issuance_date");
+        this.expiration_date = (String) data.get("expiration_date");
+        this.sim1 = (String) data.get("sim1");
+        this.sim2 = (String) data.get("sim2");
+        this.isActive = (boolean) data.get("isActive");
     }
 
     public void setFishpondRecords(FishpondRecord[] fishpondRecords) {
@@ -47,7 +72,8 @@ public class FishpondOperator {
 
     public boolean isIsActive() {
         java.util.Date now = new java.util.Date();
-        return expiration_date.compareTo(now)>0;
+        java.util.Date exp_date = new Date(expiration_date);
+        return exp_date.compareTo(now)>0;
     }
 
     public void setIsActive(boolean isActive) {
@@ -55,7 +81,11 @@ public class FishpondOperator {
     }
 
     public String getAddress(){
-        return String.format("%s, %s, %s", barangay, municipality, cityprovince);
+        if(municipality.equals("No Municipality")){
+            return String.format("%s, %s", barangay, cityProvince);
+        } else {
+            return String.format("%s, %s, %s", barangay, municipality, cityProvince);
+        }
     }
 
     public String getFullName(){
@@ -112,9 +142,9 @@ public class FishpondOperator {
 
     public void setCityProvince(String cityprovince) {
         if(cityprovince==null||cityprovince.isEmpty()){
-            this.cityprovince = "";
+            this.cityProvince = "";
         }else{
-            this.cityprovince = cityprovince;
+            this.cityProvince = cityprovince;
         }
     }
 
@@ -126,19 +156,19 @@ public class FishpondOperator {
         }
     }
 
-    public java.util.Date getIssuance_date() {
+    public String getIssuance_date() {
         return issuance_date;
     }
 
-    public void setIssuance_date(java.util.Date issuance_date) {
+    public void setIssuance_date(String issuance_date) {
         this.issuance_date = issuance_date;
     }
 
-    public java.util.Date getExpiration_date() {
+    public String getExpiration_date() {
         return expiration_date;
     }
 
-    public void setExpiration_date(java.util.Date expiration_date) {
+    public void setExpiration_date(String expiration_date) {
         this.expiration_date = expiration_date;
     }
 
@@ -151,7 +181,7 @@ public class FishpondOperator {
     }
 
     public String getCityProvince() {
-        return cityprovince;
+        return cityProvince;
     }
 
     public String getMunicipality() {

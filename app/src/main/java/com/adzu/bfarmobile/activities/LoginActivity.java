@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView connection_status;
     private int isConnected;
     private Timer connectTimer;
+    private TimerTask timerTask;
     private CountDownTimer timer2;
     private boolean activityActive;
 
@@ -66,8 +67,6 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Offline mode", Toast.LENGTH_LONG).show();
             connection_status.setVisibility(View.VISIBLE);
         }
-
-        connectTimer = new Timer();
 
         rootLayout = findViewById(R.id.root_layout);
         animDrawable = (AnimationDrawable) rootLayout.getBackground();
@@ -226,14 +225,75 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        activityActive = true;
-        connectTimer.scheduleAtFixedRate(newTask, 3000, 100);
         super.onResume();
+        startTimer();
     }
+
+    public void startTimer() {
+        connectTimer = new Timer();
+
+        initializeTimerTask();
+
+        connectTimer.scheduleAtFixedRate(timerTask, 2000, 1000);
+    }
+
+    private void initializeTimerTask() {
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                DatabaseUtil.checkConnection(new ConnectivityListener() {
+                    @Override
+                    public void onConnected() {
+                        if (isConnected == 0) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), "Connection Established", Toast.LENGTH_LONG).show();
+                                    connection_status.setVisibility(View.INVISIBLE);
+                                    isConnected = 1;
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onDisconnected() {
+                        if (isConnected == 1) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    connection_status.setText("OFFLINE MODE");
+                                    Toast.makeText(getApplicationContext(), "Connection Lost! Offline mode activated", Toast.LENGTH_LONG).show();
+                                    connection_status.setVisibility(View.VISIBLE);
+                                    isConnected = 0;
+                                }
+                            });
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+
+                    @Override
+                    public void onStart() {
+
+                    }
+                });
+            }
+        };
+
+    }
+
 
     @Override
     protected void onPause() {
-        activityActive = false;
+        if(connectTimer != null) {
+            connectTimer.cancel();
+            connectTimer = null;
+        }
         super.onPause();
     }
 
@@ -262,56 +322,4 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    TimerTask newTask = new TimerTask(){
-        @Override
-        public void run() {
-            DatabaseUtil.checkConnection(new ConnectivityListener() {
-                @Override
-                public void onConnected() {
-                    if (activityActive) {
-                        if (isConnected == 0) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getApplicationContext(), "Connection Established", Toast.LENGTH_LONG).show();
-                                    connection_status.setVisibility(View.INVISIBLE);
-                                    isConnected = 1;
-                                }
-                            });
-                        }
-                    }
-                }
-
-                @Override
-                public void onDisconnected() {
-                    if (activityActive) {
-                        if (isConnected == 1) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    connection_status.setText("OFFLINE MODE");
-                                    Toast.makeText(getApplicationContext(), "Connection Lost! Offline mode activated", Toast.LENGTH_LONG).show();
-                                    connection_status.setVisibility(View.VISIBLE);
-                                    isConnected = 0;
-                                }
-                            });
-
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure() {
-
-                }
-
-                @Override
-                public void onStart() {
-
-                }
-
-            });
-
-        }
-    };
 }

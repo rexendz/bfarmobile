@@ -301,12 +301,8 @@ public class AddOperatorFragment extends Fragment implements Spinner.OnItemSelec
                         operator.setCityProvince(selectedCity);
                         operator.setMunicipality(selectedMunicipality);
                         operator.setFishpond_size(f8);
-                        try {
-                            operator.setIssuance_date(sourceFormat.parse(f9));
-                            operator.setExpiration_date(sourceFormat.parse(f10));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
+                        operator.setIssuance_date(f9);
+                        operator.setExpiration_date(f10);
 
                         AsyncTask.execute(new Runnable() {
                             @Override

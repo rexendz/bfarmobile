@@ -1,6 +1,7 @@
 package com.adzu.bfarmobile.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,7 @@ import com.adzu.bfarmobile.entities.OnGetDataListener;
 import com.adzu.bfarmobile.fragments.AccountFragment;
 import com.adzu.bfarmobile.fragments.AddOperatorFragment;
 import com.adzu.bfarmobile.fragments.ListFragment;
+import com.adzu.bfarmobile.fragments.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +36,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -59,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ListFragment fragment1;
     private AddOperatorFragment fragment2;
     private AccountFragment fragment3;
+    private ProfileFragment fragment4;
     private FrameLayout fragmentContainer;
     private String lastSearchText = "";
     private Toolbar toolbar;
@@ -108,8 +112,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment1).commit();
                 showSearchView();
                 TextView acct_name = findViewById(R.id.acct_name);
+                TextView acct_type = findViewById(R.id.acct_type);
                 String loggedin = "Logged in as: " + user.getUsername();
                 acct_name.setText(loggedin);
+                if(user.isAdmin()) {
+                    acct_type.setText("ADMIN");
+                    acct_type.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.button_primarypurple));
+                }
+                else if(user.isOperator()) {
+                    acct_type.setText("OPERATOR");
+                    acct_type.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.button_gray));
+                }
+                else
+                    acct_type.setVisibility(View.GONE);
             }
 
             @Override
@@ -128,6 +143,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+    }
+
+    public void startProfileFragment(long fla){
+        toolbar.setTitle("Operator Profile");
+        hideSearchView();
+        fragment4 = new ProfileFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong("fla_num", fla);
+        fragment4.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment4).commit();
     }
 
 

@@ -46,6 +46,7 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
     private View view;
     private boolean isActive;
     private RadioGroup rg1, rg2;
+    private Timer timer;
     private int filter;
 
     @Override
@@ -61,6 +62,27 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
         this.view = view;
 
         accountList = new ArrayList<>();
+
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+
+            @Override
+            public void run() {
+                try {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isActive) {
+                                ((MainActivity) getActivity()).populateAccountCards();
+                            }
+                        }
+                    });
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+        }, 0, 100);
 
         rg1 = view.findViewById(R.id.fg_acc1);
         rg2 = view.findViewById(R.id.fg_acc2);
@@ -269,6 +291,14 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
             }
         });
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(timer != null){
+            timer.cancel();
+        }
     }
 
     public int getFilter(){

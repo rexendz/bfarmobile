@@ -112,7 +112,7 @@ public class SignupActivity extends AppCompatActivity {
                 boolean operatorValid = false;
 
                 if(switch1.isChecked()) {
-                    user.setFLA(Long.parseLong(fla.getText().toString()));
+                    user.setFla_number(Long.parseLong(fla.getText().toString()));
                     if(sim1.isValid() && sim2.isValid()) {
                         user.setSim1(sim1.getNumber());
                         user.setSim2(sim2.getNumber());

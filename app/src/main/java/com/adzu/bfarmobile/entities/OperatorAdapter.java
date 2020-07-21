@@ -9,14 +9,18 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.adzu.bfarmobile.R;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.OperatorViewHolder> implements Filterable {
+
+    private OperatorTapListener tapListener;
 
     private Context ctx;
     private List<FishpondOperator> fishpondOperator;
@@ -24,9 +28,14 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.Operat
     private int filterGroup = 0;
     private int statusFilter = 0;
 
-    public OperatorAdapter(Context ctx, List<FishpondOperator> operatorList) {
+    public interface OperatorTapListener{
+        void onItemTap(int position, long fla);
+    }
+
+    public OperatorAdapter(Context ctx, List<FishpondOperator> operatorList, OperatorTapListener tapListener) {
         this.ctx = ctx;
         this.fishpondOperator = operatorList;
+        this.tapListener = tapListener;
         fishpondOperatorFull = new ArrayList<>(operatorList);
     }
 
@@ -34,8 +43,8 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.Operat
     @Override
     public OperatorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(ctx);
-        View view = inflater.inflate(R.layout.list_layout, null);
-        return new OperatorViewHolder(view);
+        View view = inflater.inflate(R.layout.list_layout, parent, false);
+        return new OperatorViewHolder(view, tapListener);
     }
 
     @Override
@@ -120,22 +129,33 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.Operat
         }
     };
 
-    class OperatorViewHolder extends RecyclerView.ViewHolder{
+    class OperatorViewHolder extends RecyclerView.ViewHolder implements CardView.OnClickListener{
 
+        CardView cardview;
         TextView text_name;
         TextView text_opnum;
         TextView text_flanum;
         TextView text_address;
         TextView text_status;
+        WeakReference<OperatorAdapter.OperatorTapListener> listenerRef;
 
-        public OperatorViewHolder(@NonNull View itemView) {
+        public OperatorViewHolder(@NonNull View itemView, OperatorTapListener tapListener) {
             super(itemView);
-
+            listenerRef = new WeakReference<>(tapListener);
+            cardview = itemView.findViewById(R.id.cardview1);
             text_name = itemView.findViewById(R.id.op_name);
             text_opnum = itemView.findViewById(R.id.op_opnum);
             text_status = itemView.findViewById(R.id.op_status);
             text_address = itemView.findViewById(R.id.op_address);
             text_flanum = itemView.findViewById(R.id.op_flanum);
+
+            cardview.setOnClickListener(this);
+
+        }
+
+        @Override
+        public void onClick(View view) {
+            listenerRef.get().onItemTap(getAdapterPosition(), Long.parseLong(text_flanum.getText().toString().substring(7)));
         }
     }
 

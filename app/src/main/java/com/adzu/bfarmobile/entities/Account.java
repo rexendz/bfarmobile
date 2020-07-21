@@ -1,9 +1,5 @@
 package com.adzu.bfarmobile.entities;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import java.util.Map;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
@@ -17,7 +13,7 @@ public class Account{
     private boolean activated;
     private boolean admin;
     private boolean operator;
-    private long FLA;
+    private long fla_number;
     private String sim1;
     private String sim2;
     private String activated_by;
@@ -30,7 +26,7 @@ public class Account{
         this.activated_by = "NONE";
         this.made_admin_by = "NONE";
         this.removed_admin_by = "NONE";
-        this.FLA = -25565;
+        this.fla_number = -25565;
         this.sim1 = "NONE";
         this.sim2 = "NONE";
     }
@@ -40,6 +36,7 @@ public class Account{
         this.middlename = (String) data.get("middlename");
         this.lastname = (String) data.get("lastname");
         this.username = (String) data.get("username");
+        this.fla_number = (long) data.get("fla_number");
         this.activated_by = (String) data.get("activated_by");
         this.made_admin_by = (String) data.get("made_admin_by");
         this.removed_admin_by = (String) data.get("removed_admin_by");
@@ -63,20 +60,12 @@ public class Account{
         return admin;
     }
 
-    public void setFLA(long FLA) {
-        this.FLA = FLA;
-    }
-
     public void setSim1(String sim1) {
         this.sim1 = sim1;
     }
 
     public void setSim2(String sim2) {
         this.sim2 = sim2;
-    }
-
-    public long getFLA() {
-        return FLA;
     }
 
     public String getSim1() {
@@ -167,5 +156,13 @@ public class Account{
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public long getFla_number() {
+        return fla_number;
+    }
+
+    public void setFla_number(long fla_number) {
+        this.fla_number = fla_number;
     }
 }
