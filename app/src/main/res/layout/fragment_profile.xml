@@ -15,7 +15,7 @@
             android:id="@+id/textView14"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#757575"
+            android:background="@color/colorPrimaryDark"
             android:gravity="center"
             android:text="Tap to show more info"
             android:textColor="#F5F5F5"
@@ -316,5 +316,158 @@
             android:text="Fishpond Data"
             android:textColor="#FFFFFF"
             android:textSize="32dp" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:background="#FFECB3">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="0, 1, 2, 3, 4, 5"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+
+            <TableRow
+                android:id="@+id/latest_head"
+                android:background="@color/colorOperator"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <TextView
+                    android:text="Date/Time"
+                    android:textSize="10sp"
+                    android:textColor="#FFFFFF"
+                    android:fontFamily="@font/product_sans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1" />
+
+                <TextView
+                    android:text="PH Level"
+                    android:textSize="10sp"
+                    android:textColor="#FFFFFF"
+                    android:fontFamily="@font/product_sans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2" />
+
+                <TextView
+                    android:text="Salinity"
+                    android:textSize="10sp"
+                    android:textColor="#FFFFFF"
+                    android:fontFamily="@font/product_sans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="3" />
+
+                <TextView
+                    android:text="Temperature"
+                    android:textSize="10sp"
+                    android:textColor="#FFFFFF"
+                    android:fontFamily="@font/product_sans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="4" />
+
+                <TextView
+                    android:text="Pressure"
+                    android:textSize="10sp"
+                    android:textColor="#FFFFFF"
+                    android:fontFamily="@font/product_sans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="5" />
+
+                <TextView
+                    android:text="DO Level"
+                    android:textSize="10sp"
+                    android:textColor="#FFFFFF"
+                    android:fontFamily="@font/product_sans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="6" />
+
+                </TableRow>
+
+
+            <TableRow
+                android:id="@+id/latest_data"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <TextView
+                    android:id="@+id/latest_date"
+                    android:text="2020-02-25 23:59:12"
+                    android:textSize="10sp"
+                    android:fontFamily="@font/product_sans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1" />
+
+                <TextView
+                    android:id="@+id/latest_ph"
+                    android:text="12.5"
+                    android:textSize="10sp"
+                    android:fontFamily="@font/product_sans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2" />
+
+                <TextView
+                    android:id="@+id/latest_salinity"
+                    android:text="16.2"
+                    android:textSize="10sp"
+                    android:fontFamily="@font/product_sans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="3" />
+
+                <TextView
+                    android:id="@+id/latest_temperature"
+                    android:text="36.6"
+                    android:textSize="10sp"
+                    android:fontFamily="@font/product_sans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="4" />
+
+                <TextView
+                    android:id="@+id/latest_pressure"
+                    android:text="35"
+                    android:textSize="10sp"
+                    android:fontFamily="@font/product_sans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="5" />
+
+                <TextView
+                    android:id="@+id/latest_dolevel"
+                    android:text="11.12"
+                    android:textSize="10sp"
+                    android:fontFamily="@font/product_sans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="6" />
+
+            </TableRow>
+
+            </TableLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <net.cachapa.expandablelayout.ExpandableLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="#FFECB3"
+            app:el_expanded="true">
+            <TableLayout
+                android:id="@+id/fishpond_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="0, 1, 2, 3, 4, 5" >
+
+            </TableLayout>
+
+        </net.cachapa.expandablelayout.ExpandableLayout>
     </LinearLayout>
 </FrameLayout>

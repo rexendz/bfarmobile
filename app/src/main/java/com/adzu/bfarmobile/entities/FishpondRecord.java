@@ -4,7 +4,6 @@ import java.util.Date;
 
 public class FishpondRecord {
 
-    private long data_id;
     private long fishpond_id;
     private float ph_level;
     private float salinity;
@@ -12,7 +11,7 @@ public class FishpondRecord {
     private float pressure;
     private float do_level;
     private String sim_number;
-    private java.util.Date record_date;
+    private String record_date;
     private String record_datetime;
 
     public String getRecord_datetime() {
@@ -31,14 +30,6 @@ public class FishpondRecord {
         this.sim_number = sim_number;
     }
 
-
-    public long getData_id() {
-        return data_id;
-    }
-
-    public void setData_id(long data_id) {
-        this.data_id = data_id;
-    }
 
     public long getFishpond_id() {
         return fishpond_id;
@@ -88,11 +79,11 @@ public class FishpondRecord {
         this.do_level = do_level;
     }
 
-    public Date getRecord_date() {
+    public String getRecord_date() {
         return record_date;
     }
 
-    public void setRecord_date(Date record_date) {
+    public void setRecord_date(String record_date) {
         this.record_date = record_date;
     }
 

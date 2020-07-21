@@ -1,5 +1,6 @@
 package com.adzu.bfarmobile.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.adzu.bfarmobile.R;
@@ -30,12 +33,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private FishpondOperator operator;
     private TextView opnum, opname, opfla, opsim1, opsim2, opaddress, opsize, opissuance, opexpiry, opdetails, opstatus;
     private ExpandableLayout expandableLayout;
+    private TableLayout table;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        this.view = inflater.inflate(R.layout.fragment_profile, container, false);
         fla_num = getArguments().getLong("fla_num");
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        return view;
     }
 
     @Override
