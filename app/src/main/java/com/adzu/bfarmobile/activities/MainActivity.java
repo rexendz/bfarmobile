@@ -2,8 +2,10 @@ package com.adzu.bfarmobile.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,6 +37,7 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -52,6 +55,7 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, RadioGroup.OnCheckedChangeListener {
 
+    private static final String TAG = "AWIT";
     private DrawerLayout drawer;
     private ExpandableLayout expandableLayout;
     private NavigationView navigationView;
@@ -60,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RadioGroup rg1, rg2;
     private int filter = 0;
     private int statusfilter = 0;
-    private String account_key;
+    private boolean profile_exists = false;
     private ListFragment fragment1;
     private AddOperatorFragment fragment2;
     private AccountFragment fragment3;
@@ -70,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String lastSearchText = "";
     private Toolbar toolbar;
     private FrameLayout searchContainer;
+    private Account user;
+    private Context ctx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ctx = this;
 
 
         spinner = findViewById(R.id.filter_active);
@@ -91,9 +98,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView = findViewById(R.id.nav_view);
         drawer = findViewById(R.id.drawer_layout);
-        fragment2 = new AddOperatorFragment();
-        fragment3 = new AccountFragment();
-        fragment5 = new AddRecordFragment();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -103,58 +107,101 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setCheckedItem(R.id.nav_operatorlist);
         navigationView.setNavigationItemSelectedListener(this);
 
+        user = new Account();
+
         Intent intent = getIntent();
-        account_key = intent.getStringExtra("account_key");
+        user.setAdmin(intent.getBooleanExtra("account_admin", false));
+        user.setUsername(intent.getStringExtra("account_username"));
+        user.setFla_number(intent.getLongExtra("account_fla", 0));
+        user.setFirstname(intent.getStringExtra("account_firstname"));
+        user.setMiddlename(intent.getStringExtra("account_middlename"));
+        user.setLastname(intent.getStringExtra("account_lastname"));
+        user.setOperator(intent.getBooleanExtra("account_operator", true));
+        user.setSim1(intent.getStringExtra("account_sim1"));
+        user.setSim2(intent.getStringExtra("account_sim2"));
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("account");
-        DatabaseUtil.readDataByKey(account_key, ref, new OnGetDataListener() {
-            @Override
-            public void dataRetrieved(DataSnapshot dataSnapshot) {
-                Account user = new Account((Map<String, Object>) dataSnapshot.getValue());
-                fragment1 = new ListFragment();
-                fragment1.setUser(user);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment1).commit();
-                showSearchView();
-                TextView acct_name = findViewById(R.id.acct_name);
-                TextView acct_type = findViewById(R.id.acct_type);
-                String loggedin = "Logged in as: " + user.getUsername();
-                acct_name.setText(loggedin);
-                if(user.isAdmin()) {
-                    acct_type.setText("ADMIN");
-                    acct_type.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.button_primarypurple));
+
+
+        if(user.isAdmin()) {
+            fragment1 = new ListFragment();
+            fragment2 = new AddOperatorFragment();
+            fragment3 = new AccountFragment();
+            fragment5 = new AddRecordFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment1).commit();
+            showSearchView();
+        }
+        else {
+            Menu navMenu = navigationView.getMenu();
+            navMenu.findItem(R.id.nav_admin).setVisible(false);
+            toolbar.setTitle("Operator Account");
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("operator");
+            DatabaseUtil.readDataByFLA(user.getFla_number(), ref, new OnGetDataListener() {
+                @Override
+                public void dataRetrieved(DataSnapshot dataSnapshot) {
+                    startProfileFragment(user.getFla_number());
+                    profile_exists = true;
                 }
-                else if(user.isOperator()) {
-                    acct_type.setText("OPERATOR");
-                    acct_type.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.button_gray));
+
+                @Override
+                public void dataExists(DataSnapshot dataSnapshot) {
+
                 }
-                else
-                    acct_type.setVisibility(View.GONE);
-            }
 
-            @Override
-            public void dataExists(DataSnapshot dataSnapshot) {
+                @Override
+                public void onStart() {
+                    new CountDownTimer(1000, 100) {
 
-            }
+                        @Override
+                        public void onTick(long l) {
 
-            @Override
-            public void onStart() {
+                        }
 
-            }
+                        @Override
+                        public void onFinish() {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if(!profile_exists) {
+                                            AlertDialog.Builder alert = new AlertDialog.Builder(ctx);
+                                            alert.setTitle("Operator");
+                                            alert.setMessage("Account is activated but your profile is not yet created.");
+                                            alert.setPositiveButton("Logout", new DialogInterface.OnClickListener() {
 
-            @Override
-            public void onFailure() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    Intent intent = new Intent(ctx, LoginActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                            });
+                                            alert.setNegativeButton("Continue", null);
+                                            alert.show();
+                                        }
+                                    }
+                                });
+                        }
+                    }.start();
 
-            }
-        });
+                }
+
+                @Override
+                public void onFailure() {
+
+                }
+            });
+        }
+
 
     }
 
     public void startProfileFragment(long fla){
-        searchView.closeSearch();
-        fragmentContainer.setPadding(0, 0, 0, 0);
-        expandableLayout.collapse();
+        if(user.isAdmin()) {
+            searchView.closeSearch();
+            fragmentContainer.setPadding(0, 0, 0, 0);
+            expandableLayout.collapse();
+            hideSearchView();
+        }
         toolbar.setTitle("Operator Profile");
-        hideSearchView();
         fragment4 = new ProfileFragment();
         Bundle bundle = new Bundle();
         bundle.putLong("fla_num", fla);
@@ -191,7 +238,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        createSearchView(menu);
+        if(user.isAdmin())
+            createSearchView(menu);
+
+        TextView acct_type = findViewById(R.id.acct_type);
+        TextView acct_name = findViewById(R.id.acct_name);
+        String loggedin = "Logged in as: " + user.getUsername();
+        acct_name.setText(loggedin);
+
+        if (user.isAdmin()){
+        acct_type.setText("ADMIN");
+        acct_type.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.button_primarypurple));
+        } else if (user.isOperator()){
+        acct_type.setText("OPERATOR");
+        acct_type.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.button_gray));
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -202,6 +263,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         searchView = findViewById(R.id.search_view);
         searchView.setMenuItem(searchItem);
         expandableLayout = findViewById(R.id.expandable_layout);
+
+        filter = 1;
+        statusfilter = 0;
+
+        populateCards();
 
         List<String> spinner_list = new ArrayList<>();
         spinner_list.add("All");
@@ -319,9 +385,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle("Add Record");
                 break;
             case R.id.nav_logout:
-                account_key = "";
                 Toast.makeText(getApplicationContext(), "Logged Out", Toast.LENGTH_LONG).show();
-                fragment1.setActive(false);
+                if(user.isAdmin()) {
+                    fragment1.setActive(false);
+                    fragment3.setActive(false);
+                }
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
                 finish();
@@ -333,7 +401,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
-
         RadioButton rb = findViewById(i);
         RadioGroup rg1 = findViewById(R.id.filtergroup);
         RadioGroup rg2 = findViewById(R.id.filtergroup2);

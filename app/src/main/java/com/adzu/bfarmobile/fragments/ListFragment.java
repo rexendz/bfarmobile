@@ -47,7 +47,6 @@ import static android.content.ContentValues.TAG;
 
 
 public class ListFragment extends Fragment implements OperatorAdapter.OperatorTapListener{
-    private Account user;
 
     private RecyclerView recyclerView;
     private List<FishpondOperator> operatorList;
@@ -64,10 +63,6 @@ public class ListFragment extends Fragment implements OperatorAdapter.OperatorTa
     }
 
     public ListFragment() {
-    }
-
-    public void setUser(Account user){
-        this.user = user;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

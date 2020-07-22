@@ -310,7 +310,7 @@
         <TextView
             android:id="@+id/fishpond_data"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="wrap_content"
             android:background="#FFA000"
             android:fontFamily="@font/product_sans"
             android:gravity="center"
@@ -473,5 +473,15 @@
             </androidx.recyclerview.widget.RecyclerView>
 
         </net.cachapa.expandablelayout.ExpandableLayout>
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/norecord"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24dp"
+            android:gravity="center"
+            android:fontFamily="@font/product_sans"
+            android:text="No Record" />
     </LinearLayout>
 </FrameLayout>

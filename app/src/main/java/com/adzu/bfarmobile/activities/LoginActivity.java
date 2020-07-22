@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adzu.bfarmobile.R;
+import com.adzu.bfarmobile.entities.Account;
 import com.adzu.bfarmobile.entities.ConnectivityListener;
 import com.adzu.bfarmobile.entities.DatabaseUtil;
 import com.adzu.bfarmobile.entities.OnGetDataListener;
@@ -122,11 +123,10 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void dataRetrieved(DataSnapshot dataSnapshot) {
                     Map<String, Object> newPost = (Map<String, Object>) dataSnapshot.getValue();
-                    String pass = (String) newPost.get("password");
-                    boolean activated = (boolean) newPost.get("activated");
-                    BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), pass);
+                    Account account = new Account(newPost);
+                    BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), account.getPassword());
                     if (result.verified) {
-                        if (activated) {
+                        if (account.isActivated()) {
                             loginSuccess = true;
                             Toast.makeText(getApplicationContext(), "Login Success!", Toast.LENGTH_LONG).show();
 
@@ -141,7 +141,17 @@ public class LoginActivity extends AppCompatActivity {
                             }
 
                             Intent newIntent = new Intent(getApplicationContext(), MainActivity.class);
-                            newIntent.putExtra("account_key", dataSnapshot.getKey());
+                            Bundle extras = new Bundle();
+                            extras.putString("account_username", account.getUsername());
+                            extras.putLong("account_fla", account.getFla_number());
+                            extras.putString("account_firstname", account.getFirstname());
+                            extras.putString("account_middlename", account.getMiddlename());
+                            extras.putString("account_lastname", account.getLastname());
+                            extras.putBoolean("account_operator", account.isOperator());
+                            extras.putString("account_sim1", account.getSim1());
+                            extras.putString("account_sim2", account.getSim2());
+                            extras.putBoolean("account_admin", account.isAdmin());
+                            newIntent.putExtras(extras);
                             startActivity(newIntent);
                             finish();
                         } else {
