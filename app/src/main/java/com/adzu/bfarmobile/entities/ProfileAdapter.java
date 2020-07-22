@@ -42,9 +42,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
     @Override
     public void onBindViewHolder(@NonNull ProfileViewHolder holder, int position) {
         FishpondRecord record = recordList.get(position);
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        Date netDate = (new Date(record.getTimestamp()));
-        holder.row_date.setText(formatter.format(netDate));
+        holder.row_date.setText(TimestampToDate.getDate(record.getTimestamp()));
         holder.row_dolevel.setText(String.valueOf(record.getDo_level()));
         holder.row_temperature.setText(String.valueOf(record.getTemperature()));
         holder.row_ph.setText(String.valueOf(record.getPh_level()));
