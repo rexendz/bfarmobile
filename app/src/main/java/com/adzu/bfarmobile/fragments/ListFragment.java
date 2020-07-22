@@ -43,8 +43,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static android.content.ContentValues.TAG;
 
-public class ListFragment extends Fragment {
+
+public class ListFragment extends Fragment implements OperatorAdapter.OperatorTapListener{
     private Account user;
 
     private RecyclerView recyclerView;
@@ -54,6 +56,12 @@ public class ListFragment extends Fragment {
     private View view;
     private Timer timer;
     private boolean isActive;
+    private OperatorListListener operatorListListener;
+    private int count;
+
+    public interface OperatorListListener{
+        public void onGetList();
+    }
 
     public ListFragment() {
     }
@@ -64,6 +72,7 @@ public class ListFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        count = 0;
         isActive = true;
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
@@ -96,7 +105,7 @@ public class ListFragment extends Fragment {
                 }
             }
 
-        }, 0, 100);
+        }, 0, 500);
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("operator");
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -105,21 +114,8 @@ public class ListFragment extends Fragment {
                 for (DataSnapshot snap : snapshot.getChildren()){
                     operatorList.add(snap.getValue(FishpondOperator.class));
                 }
-                operatorAdapter = new OperatorAdapter(view.getContext(), operatorList, new OperatorAdapter.OperatorTapListener() {
-                    @Override
-                    public void onItemTap(int position, long fla) {
-                        isActive = false;
-                        ((MainActivity)getActivity()).startProfileFragment(fla);
-                    }
-                });
-
-                recyclerView = view.findViewById(R.id.recyclerView);
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
-
-
-                recyclerView.setAdapter(operatorAdapter);
+                operatorListListener.onGetList();
+                count++;
             }
 
             @Override
@@ -127,6 +123,21 @@ public class ListFragment extends Fragment {
 
             }
         });
+        operatorListListener = new OperatorListListener() {
+            @Override
+            public void onGetList() {
+                if(count == 0) {
+                    operatorAdapter = new OperatorAdapter(view.getContext(), operatorList, ListFragment.this);
+
+                    recyclerView = view.findViewById(R.id.recyclerView);
+                    recyclerView.setHasFixedSize(true);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+
+                    recyclerView.setAdapter(operatorAdapter);
+                }
+            }
+        };
     }
 
     @Override
@@ -149,4 +160,10 @@ public class ListFragment extends Fragment {
         text_main.setVisibility(i);
     }
 
+    @Override
+    public void onItemTap(int position, long fla) {
+
+        isActive = false;
+        ((MainActivity)getActivity()).startProfileFragment(fla);
+    }
 }

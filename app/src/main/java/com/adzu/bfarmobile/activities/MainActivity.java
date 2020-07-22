@@ -24,6 +24,7 @@ import com.adzu.bfarmobile.entities.DatabaseUtil;
 import com.adzu.bfarmobile.entities.OnGetDataListener;
 import com.adzu.bfarmobile.fragments.AccountFragment;
 import com.adzu.bfarmobile.fragments.AddOperatorFragment;
+import com.adzu.bfarmobile.fragments.AddRecordFragment;
 import com.adzu.bfarmobile.fragments.ListFragment;
 import com.adzu.bfarmobile.fragments.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
@@ -39,6 +40,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AddOperatorFragment fragment2;
     private AccountFragment fragment3;
     private ProfileFragment fragment4;
+    private AddRecordFragment fragment5;
     private FrameLayout fragmentContainer;
     private String lastSearchText = "";
     private Toolbar toolbar;
@@ -90,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer = findViewById(R.id.drawer_layout);
         fragment2 = new AddOperatorFragment();
         fragment3 = new AccountFragment();
+        fragment5 = new AddRecordFragment();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -146,6 +150,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void startProfileFragment(long fla){
+        searchView.closeSearch();
+        fragmentContainer.setPadding(0, 0, 0, 0);
+        expandableLayout.collapse();
         toolbar.setTitle("Operator Profile");
         hideSearchView();
         fragment4 = new ProfileFragment();
@@ -176,17 +183,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 else {
                     fragment1.updateTextView(View.GONE);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void populateAccountCards(){
-        if(fragment3.getAccountAdapter() != null) {
-            try {
-                fragment3.getAccountAdapter().setFilter(fragment3.getFilter());
-                fragment3.getAccountAdapter().getFilter().filter("");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -275,6 +271,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void hideSearchView(){
         try {
+            searchView.closeSearch();
             searchContainer.setVisibility(View.GONE);
             searchView.setVisibility(View.GONE);
             findViewById(R.id.action_search).setVisibility(View.GONE);
@@ -287,6 +284,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
             case R.id.nav_operatorlist:
+                fragmentContainer.setPadding(0, 0, 0, 0);
                 fragment3.setActive(false);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment1).commit();
                 fragment1.setActive(true);
@@ -295,6 +293,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle("Fishpond Operators");
                 break;
             case R.id.nav_manageope:
+                fragmentContainer.setPadding(0, 0, 0, 0);
+                expandableLayout.collapse();
                 fragment1.setActive(false);
                 fragment3.setActive(false);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment2).commit();
@@ -302,10 +302,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle("Add New Operators");
                 break;
             case R.id.nav_manageacc:
+                fragmentContainer.setPadding(0, 0, 0, 0);
+                expandableLayout.collapse();
                 fragment1.setActive(false);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment3).commit();
                 hideSearchView();
                 toolbar.setTitle("Manage Accounts");
+                break;
+            case R.id.nav_addrecord:
+                fragmentContainer.setPadding(0, 0, 0, 0);
+                expandableLayout.collapse();;
+                fragment1.setActive(false);
+                fragment3.setActive(false);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment5).commit();
+                hideSearchView();
+                toolbar.setTitle("Add Record");
                 break;
             case R.id.nav_logout:
                 account_key = "";
@@ -342,7 +353,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             default:
                 Log.d("Tester", "Error");
         }
-        Log.d("Tester", "Filter: " + filter);
 
         populateCards();
 

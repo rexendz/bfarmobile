@@ -137,7 +137,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
         }
     };
 
-    class AccountViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class AccountViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView text_name;
         TextView text_username;
@@ -146,11 +146,11 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
         TextView text_status3; // Operator
         Button button_left; // Deactivate | Remove Request
         Button button_right; // Admin | Activate
-        private WeakReference<AccountListClickListener> listenerRef;
+        AccountListClickListener clickListener;
 
         public AccountViewHolder(@NonNull View itemView, AccountListClickListener clickListener) {
             super(itemView);
-            listenerRef = new WeakReference<>(clickListener);
+            this.clickListener = clickListener;
 
             text_name = itemView.findViewById(R.id.acc_name);
             text_username = itemView.findViewById(R.id.acc_username);
@@ -168,10 +168,10 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
         public void onClick(View view) {
 
             if (view.getId() == button_left.getId())
-                listenerRef.get().leftButtonClick(getAdapterPosition(), button_left.getText().toString(), text_username.getText().toString().substring(10));
+                clickListener.leftButtonClick(getAdapterPosition(), button_left.getText().toString(), text_username.getText().toString().substring(10));
 
             if (view.getId() == button_right.getId())
-                listenerRef.get().rightButtonClick(getAdapterPosition(), button_right.getText().toString(), text_username.getText().toString().substring(10));
+                clickListener.rightButtonClick(getAdapterPosition(), button_right.getText().toString(), text_username.getText().toString().substring(10));
 
         }
 

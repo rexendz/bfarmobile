@@ -1,25 +1,26 @@
 package com.adzu.bfarmobile.entities;
 
-import java.util.Date;
+
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.ServerValue;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class FishpondRecord {
 
-    private long fishpond_id;
     private float ph_level;
     private float salinity;
     private float temperature;
     private float pressure;
     private float do_level;
     private String sim_number;
-    private String record_date;
-    private String record_datetime;
+    private Long timestamp;
 
-    public String getRecord_datetime() {
-        return record_datetime;
-    }
+    public Long getTimestamp() { return timestamp;}
 
-    public void setRecord_datetime(String record_datetime) {
-        this.record_datetime = record_datetime;
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getSim_number() {
@@ -31,20 +32,12 @@ public class FishpondRecord {
     }
 
 
-    public long getFishpond_id() {
-        return fishpond_id;
-    }
-
     public float getPressure(){
         return pressure;
     }
 
     public void setPressure(float pressure){
         this.pressure = pressure;
-    }
-
-    public void setFishpond_id(long fishpond_id) {
-        this.fishpond_id = fishpond_id;
     }
 
     public float getPh_level() {
@@ -77,14 +70,6 @@ public class FishpondRecord {
 
     public void setDo_level(float do_level) {
         this.do_level = do_level;
-    }
-
-    public String getRecord_date() {
-        return record_date;
-    }
-
-    public void setRecord_date(String record_date) {
-        this.record_date = record_date;
     }
 
 

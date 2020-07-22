@@ -38,7 +38,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class AccountFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
+public class AccountFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, AccountAdapter.AccountListClickListener {
 
     private RecyclerView recyclerView;
     private List<Account> accountList;
@@ -48,11 +48,34 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
     private RadioGroup rg1, rg2;
     private Timer timer;
     private int filter;
+    private DatabaseReference ref;
+    private int count;
+
+    private AccountListListener accountListListener = new AccountListListener() {
+        @Override
+        public void onGetList() {
+            if(count == 0) {
+                accountAdapter = new AccountAdapter(getContext(), accountList, AccountFragment.this);
+
+                recyclerView = view.findViewById(R.id.recyclerView2);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+
+                recyclerView.setAdapter(accountAdapter);
+            }
+        }
+    };
+
+    public interface AccountListListener{
+        void onGetList();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         isActive = true;
+        count = 0;
         return inflater.inflate(R.layout.fragment_account, container, false);
     }
 
@@ -73,7 +96,7 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
                         @Override
                         public void run() {
                             if (isActive) {
-                                ((MainActivity) getActivity()).populateAccountCards();
+                                populateAccountCards();
                             }
                         }
                     });
@@ -82,7 +105,7 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
                 }
             }
 
-        }, 0, 100);
+        }, 0, 500);
 
         rg1 = view.findViewById(R.id.fg_acc1);
         rg2 = view.findViewById(R.id.fg_acc2);
@@ -90,49 +113,15 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
         rg1.setOnCheckedChangeListener(this);
         rg2.setOnCheckedChangeListener(this);
 
-        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("account");
+        ref = FirebaseDatabase.getInstance().getReference().child("account");
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snap : snapshot.getChildren()){
                     accountList.add(snap.getValue(Account.class));
                 }
-                accountAdapter = new AccountAdapter(view.getContext(), accountList, new AccountAdapter.AccountListClickListener() {
-                    @Override
-                    public void leftButtonClick(int i, String button, String username) {
-                        switch(button){
-                            case "DEACTIVATE ACCOUNT":
-                                modifyAccount(ref, 0, username);
-                                break;
-                            case "REMOVE REQUEST":
-                                modifyAccount(ref, 1, username);
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void rightButtonClick(int i, String button, String username) {
-                        switch(button){
-                            case "REMOVE AS ADMIN":
-                                modifyAccount(ref, 2, username);
-                                break;
-                            case "MAKE ADMIN":
-                                modifyAccount(ref, 3, username);
-                                break;
-                            case "ACTIVATE ACCOUNT":
-                                modifyAccount(ref, 4, username);
-                                break;
-                        }
-                    }
-                });
-
-                recyclerView = view.findViewById(R.id.recyclerView2);
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
-
-
-                recyclerView.setAdapter(accountAdapter);
+                accountListListener.onGetList();
+                count++;
             }
 
             @Override
@@ -166,6 +155,7 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which){
                                     case DialogInterface.BUTTON_POSITIVE:
+                                        Toast.makeText(getContext(), "Account Deactivated", Toast.LENGTH_LONG).show();
                                         dataSnapshot.getRef().child("activated").setValue(false);
                                         dataSnapshot.getRef().child("admin").setValue(false);
                                         fragmentTransaction.detach(currentFragment);
@@ -174,7 +164,6 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
                                         break;
 
                                     case DialogInterface.BUTTON_NEGATIVE:
-                                        Toast.makeText(getContext(), "Action Cancelled", Toast.LENGTH_LONG).show();
                                         break;
                                 }
                             }
@@ -189,6 +178,7 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which){
                                     case DialogInterface.BUTTON_POSITIVE:
+                                        Toast.makeText(getContext(), "Action Deleted", Toast.LENGTH_LONG).show();
                                         dataSnapshot.getRef().removeValue();
                                         fragmentTransaction.detach(currentFragment);
                                         fragmentTransaction.attach(currentFragment);
@@ -196,7 +186,6 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
                                         break;
 
                                     case DialogInterface.BUTTON_NEGATIVE:
-                                        Toast.makeText(getContext(), "Action Cancelled", Toast.LENGTH_LONG).show();
                                         break;
                                 }
                             }
@@ -211,6 +200,7 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which){
                                     case DialogInterface.BUTTON_POSITIVE:
+                                        Toast.makeText(getContext(), "Removed Account's Admin Privilege", Toast.LENGTH_LONG).show();
                                         dataSnapshot.getRef().child("admin").setValue(false);
                                         fragmentTransaction.detach(currentFragment);
                                         fragmentTransaction.attach(currentFragment);
@@ -218,7 +208,6 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
                                         break;
 
                                     case DialogInterface.BUTTON_NEGATIVE:
-                                        Toast.makeText(getContext(), "Action Cancelled", Toast.LENGTH_LONG).show();
                                         break;
                                 }
                             }
@@ -233,6 +222,7 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which){
                                     case DialogInterface.BUTTON_POSITIVE:
+                                        Toast.makeText(getContext(), "Account Granted Admin Privileges", Toast.LENGTH_LONG).show();
                                         dataSnapshot.getRef().child("admin").setValue(true);
                                         fragmentTransaction.detach(currentFragment);
                                         fragmentTransaction.attach(currentFragment);
@@ -240,7 +230,6 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
                                         break;
 
                                     case DialogInterface.BUTTON_NEGATIVE:
-                                        Toast.makeText(getContext(), "Action Cancelled", Toast.LENGTH_LONG).show();
                                         break;
                                 }
                             }
@@ -255,6 +244,7 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which){
                                     case DialogInterface.BUTTON_POSITIVE:
+                                        Toast.makeText(getContext(), "Account Activated", Toast.LENGTH_LONG).show();
                                         dataSnapshot.getRef().child("activated").setValue(true);
                                         fragmentTransaction.detach(currentFragment);
                                         fragmentTransaction.attach(currentFragment);
@@ -262,7 +252,6 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
                                         break;
 
                                     case DialogInterface.BUTTON_NEGATIVE:
-                                        Toast.makeText(getContext(), "Action Cancelled", Toast.LENGTH_LONG).show();
                                         break;
                                 }
                             }
@@ -293,16 +282,23 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
 
     }
 
+    public void populateAccountCards(){
+        if(accountAdapter != null) {
+            try {
+                accountAdapter.setFilter(filter);
+                accountAdapter.getFilter().filter("");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     public void onStop() {
         super.onStop();
         if(timer != null){
             timer.cancel();
         }
-    }
-
-    public int getFilter(){
-        return filter;
     }
 
     public void setActive(boolean status){
@@ -324,6 +320,33 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
                 rg1.clearCheck();
                 rg1.setOnCheckedChangeListener(this);
                 filter = radioGroup.indexOfChild(rb) + 3;
+                break;
+        }
+        populateAccountCards();
+    }
+    @Override
+    public void leftButtonClick(int i, String button, String username) {
+        switch(button){
+            case "DEACTIVATE ACCOUNT":
+                modifyAccount(ref, 0, username);
+                break;
+            case "REMOVE REQUEST":
+                modifyAccount(ref, 1, username);
+                break;
+        }
+    }
+
+    @Override
+    public void rightButtonClick(int i, String button, String username) {
+        switch(button){
+            case "REMOVE AS ADMIN":
+                modifyAccount(ref, 2, username);
+                break;
+            case "MAKE ADMIN":
+                modifyAccount(ref, 3, username);
+                break;
+            case "ACTIVATE ACCOUNT":
+                modifyAccount(ref, 4, username);
                 break;
         }
     }

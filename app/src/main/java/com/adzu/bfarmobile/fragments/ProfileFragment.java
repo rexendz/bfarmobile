@@ -1,16 +1,26 @@
 package com.adzu.bfarmobile.fragments;
 
+import android.app.ActionBar;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -18,40 +28,117 @@ import android.widget.TextView;
 import com.adzu.bfarmobile.R;
 import com.adzu.bfarmobile.entities.DatabaseUtil;
 import com.adzu.bfarmobile.entities.FishpondOperator;
+import com.adzu.bfarmobile.entities.FishpondRecord;
 import com.adzu.bfarmobile.entities.OnGetDataListener;
+import com.adzu.bfarmobile.entities.OperatorAdapter;
+import com.adzu.bfarmobile.entities.ProfileAdapter;
+import com.adzu.bfarmobile.entities.TimestampToDate;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
     private View view;
     private long fla_num;
     private FishpondOperator operator;
     private TextView opnum, opname, opfla, opsim1, opsim2, opaddress, opsize, opissuance, opexpiry, opdetails, opstatus;
-    private ExpandableLayout expandableLayout;
-    private TableLayout table;
+    private ConstraintLayout opdetails_short;
+    private ExpandableLayout expandableLayout, expandableLayout2;
+    private List<FishpondRecord> recordList;
+    private FishpondRecord latestRecord;
+    private TableRow table;
+    private int count;
+    private LinearLayout layoutss;
+    private ProfileListListener profileListListener;
+    private ProfileAdapter profileAdapter;
+    private RecyclerView recyclerView;
+
+    public interface ProfileListListener{
+        void onGetList(int count);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        count = 0;
         this.view = inflater.inflate(R.layout.fragment_profile, container, false);
         fla_num = getArguments().getLong("fla_num");
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
+        layoutss = view.findViewById(R.id.table_container);
+        table = view.findViewById(R.id.latest_data1);
+        recordList = new ArrayList<>();
+
+        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().child("fishpond_record");
+        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snap : snapshot.getChildren()){
+                    recordList.add(snap.getValue(FishpondRecord.class));
+                }
+                Collections.sort(recordList, new Comparator<FishpondRecord>() {
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                    @Override
+                    public int compare(FishpondRecord t2, FishpondRecord t1) {
+                        return Long.compare(t1.getTimestamp(), t2.getTimestamp());
+                    }
+                });
+                latestRecord = recordList.get(0);
+                profileListListener.onGetList(count++);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         expandableLayout = view.findViewById(R.id.expandable_layout2);
+        expandableLayout2 = view.findViewById(R.id.expandable_layout3);
         opdetails = view.findViewById(R.id.operatordetails);
+        opdetails_short = view.findViewById(R.id.opdetails_short);
+        TextView fishpond_data = view.findViewById(R.id.fishpond_data);
+
+        fishpond_data.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!expandableLayout2.isExpanded()) {
+                    table.setVisibility(View.INVISIBLE);
+                    layoutss.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 42));
+                    expandableLayout2.expand();
+
+                }
+                else {
+                    layoutss.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 84));
+                    table.setVisibility(View.VISIBLE);
+                    expandableLayout2.collapse();
+                }
+            }
+        });
+
+        recyclerView = view.findViewById(R.id.recyclerView3);
 
         opdetails.setOnClickListener(this);
+        opdetails_short.setOnClickListener(this);
+
 
         opstatus = view.findViewById(R.id.profile_opstatus);
         opnum = view.findViewById(R.id.profile_opnum);
@@ -102,7 +189,28 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
             }
         });
+        profileListListener = new ProfileListListener() {
+            @Override
+            public void onGetList(int count) {
+                if(count == 0) {
+                    ((TextView) view.findViewById(R.id.latest_date)).setText(TimestampToDate.getDate(latestRecord.getTimestamp()));
+                    ((TextView) view.findViewById(R.id.latest_ph)).setText(String.valueOf(latestRecord.getPh_level()));
+                    ((TextView) view.findViewById(R.id.latest_dolevel)).setText(String.valueOf(latestRecord.getDo_level()));
+                    ((TextView) view.findViewById(R.id.latest_pressure)).setText(String.valueOf(latestRecord.getPressure()));
+                    ((TextView) view.findViewById(R.id.latest_temperature)).setText(String.valueOf(latestRecord.getTemperature()));
+                    ((TextView) view.findViewById(R.id.latest_salinity)).setText(String.valueOf(latestRecord.getSalinity()));
 
+                    profileAdapter = new ProfileAdapter(view.getContext(), recordList);
+
+                    recyclerView = view.findViewById(R.id.recyclerView3);
+                    recyclerView.setHasFixedSize(true);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+
+                    recyclerView.setAdapter(profileAdapter);
+                }
+            }
+        };
 
     }
 

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_animation"
+    android:id="@+id/root_layout">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="380dp"
+        android:layout_height="600dp"
+        android:layout_gravity="center"
+        android:background="@drawable/layout_bg">
+
+        <EditText
+            android:id="@+id/add_dolevel"
+            android:layout_width="240dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="numberDecimal"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/textView39"
+            app:layout_constraintTop_toBottomOf="@+id/add_temperature"
+            tools:layout_editor_absoluteX="104dp" />
+
+        <TextView
+            android:id="@+id/textView42"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:fontFamily="@font/product_sans"
+            android:gravity="center_vertical"
+            android:text="Temperature"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/add_temperature"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/add_temperature"
+            android:layout_width="240dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="numberDecimal"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/textView42"
+            app:layout_constraintTop_toBottomOf="@+id/add_ph" />
+
+        <TextView
+            android:id="@+id/textView41"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:fontFamily="@font/product_sans"
+            android:gravity="center_vertical"
+            android:text="PH_Level"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/add_ph"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView40"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:fontFamily="@font/product_sans"
+            android:gravity="center_vertical"
+            android:text="Pressure"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/add_pressure"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/add_ph"
+            android:layout_width="240dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="numberDecimal"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/textView41"
+            app:layout_constraintTop_toBottomOf="@+id/add_pressure" />
+
+        <EditText
+            android:id="@+id/add_pressure"
+            android:layout_width="240dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="numberDecimal"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/textView40"
+            app:layout_constraintTop_toBottomOf="@+id/add_salinity" />
+
+        <TextView
+            android:id="@+id/textView39"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:fontFamily="@font/product_sans"
+            android:gravity="center_vertical"
+            android:text="DO_Level"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/add_dolevel"
+            app:layout_constraintEnd_toStartOf="@+id/add_dolevel"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="52dp"
+            android:text="Transmitter Sim (Fishpond)"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <net.rimoto.intlphoneinput.IntlPhoneInput
+            android:id="@+id/add_sim"
+            android:layout_width="240dp"
+            android:layout_height="48dp"
+            android:ems="10"
+            android:gravity="center"
+            android:maxLength="10"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView10"
+            app:layout_constraintStart_toEndOf="@+id/textView10" />
+
+        <EditText
+            android:id="@+id/add_salinity"
+            android:layout_width="240dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="numberDecimal"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/textView12"
+            app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:fontFamily="@font/product_sans"
+            android:gravity="center_vertical"
+            android:text="Salinity"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/add_salinity"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/button_record"
+            android:layout_width="172dp"
+            android:layout_height="62dp"
+            android:layout_marginBottom="32dp"
+            android:text="Add Record"
+            android:background="@drawable/button_primaryblue"
+            android:fontFamily="@font/product_sans"
+            android:textSize="24sp"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

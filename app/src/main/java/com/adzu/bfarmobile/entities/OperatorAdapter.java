@@ -129,33 +129,32 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.Operat
         }
     };
 
-    class OperatorViewHolder extends RecyclerView.ViewHolder implements CardView.OnClickListener{
+    class OperatorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        CardView cardview;
         TextView text_name;
         TextView text_opnum;
         TextView text_flanum;
         TextView text_address;
         TextView text_status;
-        WeakReference<OperatorAdapter.OperatorTapListener> listenerRef;
+
+        OperatorTapListener operatorTapListener;
 
         public OperatorViewHolder(@NonNull View itemView, OperatorTapListener tapListener) {
             super(itemView);
-            listenerRef = new WeakReference<>(tapListener);
-            cardview = itemView.findViewById(R.id.cardview1);
+            this.operatorTapListener = tapListener;
             text_name = itemView.findViewById(R.id.op_name);
             text_opnum = itemView.findViewById(R.id.op_opnum);
             text_status = itemView.findViewById(R.id.op_status);
             text_address = itemView.findViewById(R.id.op_address);
             text_flanum = itemView.findViewById(R.id.op_flanum);
 
-            cardview.setOnClickListener(this);
+            itemView.setOnClickListener(this);
 
         }
 
         @Override
         public void onClick(View view) {
-            listenerRef.get().onItemTap(getAdapterPosition(), Long.parseLong(text_flanum.getText().toString().substring(7)));
+            operatorTapListener.onItemTap(getAdapterPosition(), Long.parseLong(text_flanum.getText().toString().substring(7)));
         }
     }
 
