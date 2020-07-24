@@ -11,7 +11,7 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="16dp"
-        android:stretchColumns="0, 1, 2, 3, 4, 5"
+        android:stretchColumns="0, 1, 2, 3, 4"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -57,19 +57,10 @@
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/row_pressure"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="5"
-            android:fontFamily="@font/product_sans"
-            android:text="35"
-            android:textSize="12sp" />
-
-        <TextView
             android:id="@+id/row_dolevel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_column="6"
+            android:layout_column="5"
             android:fontFamily="@font/product_sans"
             android:text="11.12"
             android:textSize="12sp" />
@@ -118,22 +109,13 @@
                 android:layout_column="4" />
 
             <TextView
-                android:text="Pressure"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp"
-                android:fontFamily="@font/product_sans"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="5" />
-
-            <TextView
                 android:text="DO Level"
                 android:textColor="#FFFFFF"
                 android:fontFamily="@font/product_sans"
                 android:textSize="12sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_column="6" />
+                android:layout_column="5" />
 
         </TableRow>
 

@@ -20,7 +20,6 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.adzu.bfarmobile.R;
-import com.adzu.bfarmobile.activities.MainActivity;
 import com.adzu.bfarmobile.entities.Account;
 import com.adzu.bfarmobile.entities.AccountAdapter;
 import com.adzu.bfarmobile.entities.DatabaseUtil;
@@ -29,7 +28,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -178,7 +176,7 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which){
                                     case DialogInterface.BUTTON_POSITIVE:
-                                        Toast.makeText(getContext(), "Action Deleted", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getContext(), "Account Deleted", Toast.LENGTH_LONG).show();
                                         dataSnapshot.getRef().removeValue();
                                         fragmentTransaction.detach(currentFragment);
                                         fragmentTransaction.attach(currentFragment);

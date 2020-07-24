@@ -159,6 +159,6 @@ public class ListFragment extends Fragment implements OperatorAdapter.OperatorTa
     public void onItemTap(int position, long fla) {
 
         isActive = false;
-        ((MainActivity)getActivity()).startProfileFragment(fla);
+        ((MainActivity)getActivity()).startProfileFragment(fla, true);
     }
 }

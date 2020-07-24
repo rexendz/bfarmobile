@@ -18,12 +18,10 @@
         <activity
             android:windowSoftInputMode="adjustPan"
             android:name=".activities.MainActivity"
-            android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:windowSoftInputMode="adjustPan"
             android:name=".activities.SignupActivity"
-            android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.LoginActivity"

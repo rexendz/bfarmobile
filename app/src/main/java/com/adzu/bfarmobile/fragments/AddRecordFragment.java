@@ -58,7 +58,7 @@ public class AddRecordFragment extends Fragment{
     private FishpondRecord fishpondRecord;
 
     private IntlPhoneInput sim;
-    private EditText text_ph, text_sal, text_temp, text_pressure, text_do;
+    private EditText text_ph, text_sal, text_temp, text_do;
     private Calendar myCalendar;
     private Button button;
 
@@ -77,14 +77,13 @@ public class AddRecordFragment extends Fragment{
         text_sal = view.findViewById(R.id.add_salinity);
         text_temp = view.findViewById(R.id.add_temperature);
         text_do = view.findViewById(R.id.add_dolevel);
-        text_pressure = view.findViewById(R.id.add_pressure);
         sim = view.findViewById(R.id.add_sim);
         sim.setEmptyDefault("PH");
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (text_pressure.getText().toString().isEmpty() || text_do.getText().toString().isEmpty() || text_temp.getText().toString().isEmpty() || text_ph.getText().toString().isEmpty() || text_sal.getText().toString().isEmpty())
+                if (text_do.getText().toString().isEmpty() || text_temp.getText().toString().isEmpty() || text_ph.getText().toString().isEmpty() || text_sal.getText().toString().isEmpty())
                     Toast.makeText(view.getContext(), "Fill in missing fields", Toast.LENGTH_LONG).show();
 
                 else{
@@ -92,7 +91,6 @@ public class AddRecordFragment extends Fragment{
                     fishpondRecord.setDo_level(Float.parseFloat(text_do.getText().toString()));
                     fishpondRecord.setPh_level(Float.parseFloat(text_ph.getText().toString()));
                     fishpondRecord.setSalinity(Float.parseFloat(text_sal.getText().toString()));
-                    fishpondRecord.setPressure(Float.parseFloat(text_pressure.getText().toString()));
                     fishpondRecord.setTemperature(Float.parseFloat(text_temp.getText().toString()));
                     if (!sim.isValid())
                         Toast.makeText(view.getContext(), "Please enter valid phone number", Toast.LENGTH_LONG).show();
@@ -104,7 +102,6 @@ public class AddRecordFragment extends Fragment{
                     Map<String, Object> value = new HashMap<>();
                     value.put("sim_number", fishpondRecord.getSim_number());
                     value.put("ph_level", fishpondRecord.getPh_level());
-                    value.put("pressure", fishpondRecord.getPressure());
                     value.put("salinity", fishpondRecord.getSalinity());
                     value.put("temperature", fishpondRecord.getTemperature());
                     value.put("do_level", fishpondRecord.getDo_level());

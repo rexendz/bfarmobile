@@ -12,7 +12,6 @@ public class FishpondRecord {
     private float ph_level;
     private float salinity;
     private float temperature;
-    private float pressure;
     private float do_level;
     private String sim_number;
     private Long timestamp;
@@ -29,15 +28,6 @@ public class FishpondRecord {
 
     public void setSim_number(String sim_number) {
         this.sim_number = sim_number;
-    }
-
-
-    public float getPressure(){
-        return pressure;
-    }
-
-    public void setPressure(float pressure){
-        this.pressure = pressure;
     }
 
     public float getPh_level() {

@@ -47,7 +47,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
         holder.row_temperature.setText(String.valueOf(record.getTemperature()));
         holder.row_ph.setText(String.valueOf(record.getPh_level()));
         holder.row_salinity.setText(String.valueOf(record.getSalinity()));
-        holder.row_pressure.setText(String.valueOf(record.getPressure()));
     }
 
     @Override
@@ -59,7 +58,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
 
     class ProfileViewHolder extends RecyclerView.ViewHolder {
 
-        TextView row_date, row_ph, row_salinity, row_pressure, row_temperature, row_dolevel;
+        TextView row_date, row_ph, row_salinity, row_temperature, row_dolevel;
 
 
         public ProfileViewHolder(@NonNull View itemView) {
@@ -67,8 +66,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
             row_date = itemView.findViewById(R.id.row_date);
             row_ph = itemView.findViewById(R.id.row_ph);
             row_salinity = itemView.findViewById(R.id.row_salinity);
-            row_pressure = itemView.findViewById(R.id.row_temperature);
-            row_temperature = itemView.findViewById(R.id.row_pressure);
+            row_temperature = itemView.findViewById(R.id.row_temperature);
             row_dolevel = itemView.findViewById(R.id.row_dolevel);
 
 

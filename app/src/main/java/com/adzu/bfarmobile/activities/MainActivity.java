@@ -43,7 +43,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
@@ -127,7 +129,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragment2 = new AddOperatorFragment();
             fragment3 = new AccountFragment();
             fragment5 = new AddRecordFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment1).commit();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, fragment1).commit();
+            fragmentTransaction.addToBackStack("FRAGMENT1");
             showSearchView();
         }
         else {
@@ -138,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             DatabaseUtil.readDataByFLA(user.getFla_number(), ref, new OnGetDataListener() {
                 @Override
                 public void dataRetrieved(DataSnapshot dataSnapshot) {
-                    startProfileFragment(user.getFla_number());
+                    startProfileFragment(user.getFla_number(), user.isAdmin());
                     profile_exists = true;
                 }
 
@@ -190,23 +194,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
         }
-
-
     }
 
-    public void startProfileFragment(long fla){
+    public void startProfileFragment(long fla, boolean isAdmin){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+
         if(user.isAdmin()) {
             searchView.closeSearch();
             fragmentContainer.setPadding(0, 0, 0, 0);
             expandableLayout.collapse();
             hideSearchView();
+            fragmentTransaction.addToBackStack("FRAGMENT4");
         }
         toolbar.setTitle("Operator Profile");
         fragment4 = new ProfileFragment();
         Bundle bundle = new Bundle();
         bundle.putLong("fla_num", fla);
+        bundle.putBoolean("is_admin", isAdmin);
         fragment4.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment4).commit();
+        fragmentTransaction.replace(R.id.fragment_container, fragment4);
+        fragmentTransaction.commit();
     }
 
 
@@ -215,8 +222,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
         }
-        else if(searchView.isSearchOpen()){
-            searchView.closeSearch();
+        if(user.isAdmin()) {
+            if (searchView.isSearchOpen()) {
+                searchView.closeSearch();
+            }
+            if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+                int index = getSupportFragmentManager().getBackStackEntryCount() - 1;
+                FragmentManager.BackStackEntry backEntry = getSupportFragmentManager().getBackStackEntryAt(index);
+                String previousFragment = backEntry.getName();
+                if (previousFragment.equals("FRAGMENT1")) {
+                    hideSearchView();
+                    fragment1.setActive(false);
+                } else if (previousFragment.equals("FRAGMENT3")) {
+                    fragment3.setActive(false);
+                }
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.popBackStackImmediate();
+
+                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if (currentFragment instanceof ListFragment)
+                    showSearchView();
+            }
         }
     }
 
@@ -346,13 +373,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public void replaceFragment(int i){
+        if(i == 1) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentContainer.setPadding(0, 0, 0, 0);
+            fragmentTransaction.replace(R.id.fragment_container, fragment1, "FRAGMENT1").commit();
+            showSearchView();
+            populateCards();
+            toolbar.setTitle("Fishpond Operators");
+        }
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         switch(item.getItemId()){
             case R.id.nav_operatorlist:
                 fragmentContainer.setPadding(0, 0, 0, 0);
                 fragment3.setActive(false);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment1).commit();
+                fragmentTransaction.replace(R.id.fragment_container, fragment1, "FRAGMENT1");
+                fragmentTransaction.commit();
+                fragmentTransaction.addToBackStack("FRAGMENT1");
                 fragment1.setActive(true);
                 showSearchView();
                 populateCards();
@@ -363,7 +404,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 expandableLayout.collapse();
                 fragment1.setActive(false);
                 fragment3.setActive(false);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment2).commit();
+                fragmentTransaction.replace(R.id.fragment_container, fragment2, "FRAGMENT2");
+                fragmentTransaction.commit();
+                fragmentTransaction.addToBackStack("FRAGMENT2");
                 hideSearchView();
                 toolbar.setTitle("Add New Operators");
                 break;
@@ -371,7 +414,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragmentContainer.setPadding(0, 0, 0, 0);
                 expandableLayout.collapse();
                 fragment1.setActive(false);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment3).commit();
+                fragmentTransaction.replace(R.id.fragment_container, fragment3, "FRAGMENT3");
+                fragmentTransaction.commit();
+                fragmentTransaction.addToBackStack("FRAGMENT3");
                 hideSearchView();
                 toolbar.setTitle("Manage Accounts");
                 break;
@@ -380,7 +425,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 expandableLayout.collapse();;
                 fragment1.setActive(false);
                 fragment3.setActive(false);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment5).commit();
+                fragmentTransaction.replace(R.id.fragment_container, fragment5, "FRAGMENT5");
+                fragmentTransaction.commit();
+                fragmentTransaction.addToBackStack("FRAGMENT5");
                 hideSearchView();
                 toolbar.setTitle("Add Record");
                 break;

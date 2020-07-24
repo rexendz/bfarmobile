@@ -15,10 +15,10 @@
             android:id="@+id/textView14"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
+            android:textColor="#FFFFFF"
             android:gravity="center"
             android:text="Tap to show more info"
-            android:textColor="#F5F5F5"
+            android:background="@color/colorPrimaryBlue"
             android:textSize="12dp" />
 
         <TextView
@@ -136,7 +136,7 @@
 
            <androidx.constraintlayout.widget.ConstraintLayout
                android:layout_width="match_parent"
-               android:layout_height="200dp"
+               android:layout_height="wrap_content"
                android:background="#D1C4E9">
 
                <TextView
@@ -288,15 +288,18 @@
 
                <Button
                    android:id="@+id/button_deleteop"
-                   android:layout_width="180dp"
-                   android:layout_height="wrap_content"
-                   android:layout_marginBottom="8dp"
+                   android:layout_width="200dp"
+                   android:layout_height="40dp"
+                   android:layout_marginTop="8dp"
                    android:background="@drawable/button_primaryred"
                    android:text="Delete Operator"
                    android:textColor="#FFFFFF"
-                   app:layout_constraintBottom_toBottomOf="parent"
+                   android:visibility="gone"
+                   android:layout_marginBottom="8dp"
                    app:layout_constraintEnd_toEndOf="parent"
-                   app:layout_constraintStart_toStartOf="parent" />
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintBottom_toBottomOf="parent"
+                   app:layout_constraintTop_toBottomOf="@+id/profile_opissuance" />
 
                <androidx.constraintlayout.widget.Guideline
                    android:id="@+id/guideline"
@@ -327,7 +330,7 @@
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:stretchColumns="0, 1, 2, 3, 4, 5"
+                android:stretchColumns="0, 1, 2, 3, 4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -336,7 +339,7 @@
                     android:id="@+id/latest_head"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@color/colorOperator">
+                    android:background="#FFC107">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -379,21 +382,21 @@
                         android:layout_height="wrap_content"
                         android:layout_column="5"
                         android:fontFamily="@font/product_sans"
-                        android:text="Pressure"
-                        android:textColor="#FFFFFF"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_column="6"
-                        android:fontFamily="@font/product_sans"
                         android:text="DO Level"
                         android:textColor="#FFFFFF"
                         android:textSize="12sp" />
 
                 </TableRow>
 
+                <TextView
+                    android:id="@+id/no_data"
+                    android:visibility="gone"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No Data"
+                    android:textSize="12sp"
+                    />
 
                 <TableRow
                     android:id="@+id/latest_data1"
@@ -437,19 +440,10 @@
                         android:textSize="12sp" />
 
                     <TextView
-                        android:id="@+id/latest_pressure"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_column="5"
-                        android:fontFamily="@font/product_sans"
-                        android:text="35"
-                        android:textSize="12sp" />
-
-                    <TextView
                         android:id="@+id/latest_dolevel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_column="6"
+                        android:layout_column="5"
                         android:fontFamily="@font/product_sans"
                         android:text="11.12"
                         android:textSize="12sp" />
@@ -464,9 +458,54 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#FFECB3"
+            app:el_duration="100"
             app:el_expanded="false">
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </net.cachapa.expandablelayout.ExpandableLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#388E3C">
+
+            <ImageView
+                android:visibility="invisible"
+                android:id="@+id/data_error"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_status_error"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"/>
+
+            <TextView
+                android:id="@+id/data_analysis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:fontFamily="@font/product_sans"
+                android:gravity="center"
+                android:text="Data Analysis"
+                android:textColor="#FFFFFF"
+                android:textSize="32sp" />
+        </RelativeLayout>
+
+        <net.cachapa.expandablelayout.ExpandableLayout
+            android:id="@+id/expandable_layout5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:el_duration="300"
+            app:el_expanded="false">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
