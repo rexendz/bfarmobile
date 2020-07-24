@@ -19,6 +19,7 @@ public class Account{
     private String activated_by;
     private String made_admin_by;
     private String removed_admin_by;
+    private String deactivated_by;
 
     public Account(){
         this.activated = false;
@@ -29,6 +30,7 @@ public class Account{
         this.fla_number = -25565;
         this.sim1 = "NONE";
         this.sim2 = "NONE";
+        this.deactivated_by = "NONE";
     }
 
     public Account(Map<String, Object> data){
@@ -40,6 +42,7 @@ public class Account{
         this.activated_by = (String) data.get("activated_by");
         this.made_admin_by = (String) data.get("made_admin_by");
         this.removed_admin_by = (String) data.get("removed_admin_by");
+        this.deactivated_by = (String) data.get("deactivated_by");
         this.password = (String) data.get("password");
         this.activated = (boolean) data.get("activated");
         this.admin = (boolean) data.get("admin");
@@ -164,5 +167,13 @@ public class Account{
 
     public void setFla_number(long fla_number) {
         this.fla_number = fla_number;
+    }
+
+    public String getDeactivated_by() {
+        return deactivated_by;
+    }
+
+    public void setDeactivated_by(String deactivated_by) {
+        this.deactivated_by = deactivated_by;
     }
 }

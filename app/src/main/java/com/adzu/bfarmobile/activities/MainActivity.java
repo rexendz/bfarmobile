@@ -243,6 +243,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                 if (currentFragment instanceof ListFragment)
                     showSearchView();
+                if (currentFragment instanceof AccountFragment)
+                    fragment3.setCurrentAccount(user);
             }
         }
     }
@@ -414,6 +416,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragmentContainer.setPadding(0, 0, 0, 0);
                 expandableLayout.collapse();
                 fragment1.setActive(false);
+                fragment3.setCurrentAccount(user);
                 fragmentTransaction.replace(R.id.fragment_container, fragment3, "FRAGMENT3");
                 fragmentTransaction.commit();
                 fragmentTransaction.addToBackStack("FRAGMENT3");

@@ -275,21 +275,6 @@ public class AddOperatorFragment extends Fragment implements Spinner.OnItemSelec
                     } else {
                         final FishpondOperator operator = new FishpondOperator();
                         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("operator");
-                        ref.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                count = snapshot.getChildrenCount();
-                                operator.setOperator_number(count);
-
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-
-                        DateFormat sourceFormat = new SimpleDateFormat("MM/dd/yyyy");
 
                         operator.setFirstname(f1);
                         operator.setMiddlename(f2);

@@ -9,7 +9,6 @@ public class FishpondOperator {
     private String firstname;
     private String middlename;
     private String lastname;
-    private long operator_number;
     private long fla_number;
     private String fishpond_size;
     private String cityProvince;
@@ -35,7 +34,6 @@ public class FishpondOperator {
         this.firstname = (String) data.get("firstname");
         this.middlename = (String) data.get("middlename");
         this.lastname = (String) data.get("lastname");
-        this.operator_number = (long) data.get("operator_number");
         this.fla_number = (long) data.get("fla_number");
         this.fishpond_size = (String) data.get("fishpond_size");
         this.cityProvince = (String) data.get("cityProvince");
@@ -114,14 +112,6 @@ public class FishpondOperator {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
-    }
-
-    public long getOperator_number() {
-        return operator_number;
-    }
-
-    public void setOperator_number(long operator_number) {
-        this.operator_number = operator_number;
     }
 
     public long getFla_number() {

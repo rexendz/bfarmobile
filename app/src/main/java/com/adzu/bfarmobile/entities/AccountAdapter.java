@@ -82,6 +82,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
         else
             holder.text_status3.setVisibility(View.INVISIBLE);
 
+
     }
 
     @Override

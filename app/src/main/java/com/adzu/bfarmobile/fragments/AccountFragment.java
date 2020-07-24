@@ -41,6 +41,7 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
     private RecyclerView recyclerView;
     private List<Account> accountList;
     private AccountAdapter accountAdapter;
+    private Account currentAccount;
     private View view;
     private boolean isActive;
     private RadioGroup rg1, rg2;
@@ -48,6 +49,10 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
     private int filter;
     private DatabaseReference ref;
     private int count;
+
+    public void setCurrentAccount(Account account){
+        currentAccount = account;
+    }
 
     private AccountListListener accountListListener = new AccountListListener() {
         @Override
@@ -141,143 +146,154 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
     4 - Activate Account
      */
     private void modifyAccount(DatabaseReference ref, final int i, final String user) {
-        final Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        DatabaseUtil.readDataByUsername(user, ref, new OnGetDataListener() {
-            @Override
-            public void dataRetrieved(final DataSnapshot dataSnapshot) {
-                switch(i){
-                    case 0:
-                        DialogInterface.OnClickListener dialogClickListener1 = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which){
-                                    case DialogInterface.BUTTON_POSITIVE:
-                                        Toast.makeText(getContext(), "Account Deactivated", Toast.LENGTH_LONG).show();
-                                        dataSnapshot.getRef().child("activated").setValue(false);
-                                        dataSnapshot.getRef().child("admin").setValue(false);
-                                        fragmentTransaction.detach(currentFragment);
-                                        fragmentTransaction.attach(currentFragment);
-                                        fragmentTransaction.commit();
-                                        break;
+        if(user.equals("elmer"))
+            Toast.makeText(getContext(), "Cannot Modify Root User", Toast.LENGTH_LONG).show();
+        else {
+            final Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            DatabaseUtil.readDataByUsername(user, ref, new OnGetDataListener() {
+                @Override
+                public void dataRetrieved(final DataSnapshot dataSnapshot) {
+                    switch (i) {
+                        case 0:
+                            DialogInterface.OnClickListener dialogClickListener1 = new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which) {
+                                        case DialogInterface.BUTTON_POSITIVE:
+                                            Toast.makeText(getContext(), "Account Deactivated", Toast.LENGTH_LONG).show();
+                                            dataSnapshot.getRef().child("activated").setValue(false);
+                                            dataSnapshot.getRef().child("deactivated_by").setValue(currentAccount.getUsername());
+                                            dataSnapshot.getRef().child("admin").setValue(false);
+                                            dataSnapshot.getRef().child("removed_admin_by").setValue(currentAccount.getUsername());
+                                            fragmentTransaction.detach(currentFragment);
+                                            fragmentTransaction.attach(currentFragment);
+                                            fragmentTransaction.commit();
+                                            break;
 
-                                    case DialogInterface.BUTTON_NEGATIVE:
-                                        break;
+                                        case DialogInterface.BUTTON_NEGATIVE:
+                                            break;
+                                    }
                                 }
-                            }
-                        };
-                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
-                        builder1.setMessage("Deactivate Account of " + user + "?").setPositiveButton("Yes", dialogClickListener1)
-                                .setNegativeButton("No", dialogClickListener1).show();
-                        break;
-                    case 1:
-                        DialogInterface.OnClickListener dialogClickListener2 = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which){
-                                    case DialogInterface.BUTTON_POSITIVE:
-                                        Toast.makeText(getContext(), "Account Deleted", Toast.LENGTH_LONG).show();
-                                        dataSnapshot.getRef().removeValue();
-                                        fragmentTransaction.detach(currentFragment);
-                                        fragmentTransaction.attach(currentFragment);
-                                        fragmentTransaction.commit();
-                                        break;
+                            };
+                            AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+                            builder1.setMessage("Deactivate Account of " + user + "?").setPositiveButton("Yes", dialogClickListener1)
+                                    .setNegativeButton("No", dialogClickListener1).show();
+                            break;
+                        case 1:
+                            DialogInterface.OnClickListener dialogClickListener2 = new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which) {
+                                        case DialogInterface.BUTTON_POSITIVE:
+                                            Toast.makeText(getContext(), "Account Deleted", Toast.LENGTH_LONG).show();
+                                            dataSnapshot.getRef().removeValue();
+                                            fragmentTransaction.detach(currentFragment);
+                                            fragmentTransaction.attach(currentFragment);
+                                            fragmentTransaction.commit();
+                                            break;
 
-                                    case DialogInterface.BUTTON_NEGATIVE:
-                                        break;
+                                        case DialogInterface.BUTTON_NEGATIVE:
+                                            break;
+                                    }
                                 }
-                            }
-                        };
-                        AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
-                        builder2.setMessage("Delete Account of " + user + "?\nWARNING: ALL DATA WILL BE LOST").setPositiveButton("Yes", dialogClickListener2)
-                                .setNegativeButton("No", dialogClickListener2).show();
-                        break;
-                    case 2:
-                        DialogInterface.OnClickListener dialogClickListener3 = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which){
-                                    case DialogInterface.BUTTON_POSITIVE:
-                                        Toast.makeText(getContext(), "Removed Account's Admin Privilege", Toast.LENGTH_LONG).show();
-                                        dataSnapshot.getRef().child("admin").setValue(false);
-                                        fragmentTransaction.detach(currentFragment);
-                                        fragmentTransaction.attach(currentFragment);
-                                        fragmentTransaction.commit();
-                                        break;
+                            };
+                            AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
+                            builder2.setMessage("Delete Account of " + user + "?\nWARNING: ALL DATA WILL BE LOST").setPositiveButton("Yes", dialogClickListener2)
+                                    .setNegativeButton("No", dialogClickListener2).show();
+                            break;
+                        case 2:
+                            DialogInterface.OnClickListener dialogClickListener3 = new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which) {
+                                        case DialogInterface.BUTTON_POSITIVE:
+                                            Toast.makeText(getContext(), "Removed Account's Admin Privilege", Toast.LENGTH_LONG).show();
+                                            dataSnapshot.getRef().child("admin").setValue(false);
+                                            dataSnapshot.getRef().child("removed_admin_by").setValue(currentAccount.getUsername());
+                                            dataSnapshot.getRef().child("made_admin_by").setValue("NONE");
+                                            fragmentTransaction.detach(currentFragment);
+                                            fragmentTransaction.attach(currentFragment);
+                                            fragmentTransaction.commit();
+                                            break;
 
-                                    case DialogInterface.BUTTON_NEGATIVE:
-                                        break;
+                                        case DialogInterface.BUTTON_NEGATIVE:
+                                            break;
+                                    }
                                 }
-                            }
-                        };
-                        AlertDialog.Builder builder3 = new AlertDialog.Builder(getContext());
-                        builder3.setMessage("Remove Admin Access of " + user + "?").setPositiveButton("Yes", dialogClickListener3)
-                                .setNegativeButton("No", dialogClickListener3).show();
-                        break;
-                    case 3:
-                        DialogInterface.OnClickListener dialogClickListener4 = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which){
-                                    case DialogInterface.BUTTON_POSITIVE:
-                                        Toast.makeText(getContext(), "Account Granted Admin Privileges", Toast.LENGTH_LONG).show();
-                                        dataSnapshot.getRef().child("admin").setValue(true);
-                                        fragmentTransaction.detach(currentFragment);
-                                        fragmentTransaction.attach(currentFragment);
-                                        fragmentTransaction.commit();
-                                        break;
+                            };
+                            AlertDialog.Builder builder3 = new AlertDialog.Builder(getContext());
+                            builder3.setMessage("Remove Admin Access of " + user + "?").setPositiveButton("Yes", dialogClickListener3)
+                                    .setNegativeButton("No", dialogClickListener3).show();
+                            break;
+                        case 3:
+                            DialogInterface.OnClickListener dialogClickListener4 = new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which) {
+                                        case DialogInterface.BUTTON_POSITIVE:
+                                            Toast.makeText(getContext(), "Account Granted Admin Privileges", Toast.LENGTH_LONG).show();
+                                            dataSnapshot.getRef().child("admin").setValue(true);
+                                            dataSnapshot.getRef().child("made_admin_by").setValue(currentAccount.getUsername());
+                                            dataSnapshot.getRef().child("removed_admin_by").setValue("NONE");
+                                            fragmentTransaction.detach(currentFragment);
+                                            fragmentTransaction.attach(currentFragment);
+                                            fragmentTransaction.commit();
+                                            break;
 
-                                    case DialogInterface.BUTTON_NEGATIVE:
-                                        break;
+                                        case DialogInterface.BUTTON_NEGATIVE:
+                                            break;
+                                    }
                                 }
-                            }
-                        };
-                        AlertDialog.Builder builder4 = new AlertDialog.Builder(getContext());
-                        builder4.setMessage("Grant Admin Access to " + user + "?").setPositiveButton("Yes", dialogClickListener4)
-                                .setNegativeButton("No", dialogClickListener4).show();
-                        break;
-                    case 4:
-                        DialogInterface.OnClickListener dialogClickListener5 = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which){
-                                    case DialogInterface.BUTTON_POSITIVE:
-                                        Toast.makeText(getContext(), "Account Activated", Toast.LENGTH_LONG).show();
-                                        dataSnapshot.getRef().child("activated").setValue(true);
-                                        fragmentTransaction.detach(currentFragment);
-                                        fragmentTransaction.attach(currentFragment);
-                                        fragmentTransaction.commit();
-                                        break;
+                            };
+                            AlertDialog.Builder builder4 = new AlertDialog.Builder(getContext());
+                            builder4.setMessage("Grant Admin Access to " + user + "?").setPositiveButton("Yes", dialogClickListener4)
+                                    .setNegativeButton("No", dialogClickListener4).show();
+                            break;
+                        case 4:
+                            DialogInterface.OnClickListener dialogClickListener5 = new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which) {
+                                        case DialogInterface.BUTTON_POSITIVE:
+                                            Toast.makeText(getContext(), "Account Activated", Toast.LENGTH_LONG).show();
+                                            dataSnapshot.getRef().child("activated").setValue(true);
+                                            dataSnapshot.getRef().child("activated_by").setValue(currentAccount.getUsername());
+                                            dataSnapshot.getRef().child("deactivated_by").setValue("NONE");
+                                            fragmentTransaction.detach(currentFragment);
+                                            fragmentTransaction.attach(currentFragment);
+                                            fragmentTransaction.commit();
+                                            break;
 
-                                    case DialogInterface.BUTTON_NEGATIVE:
-                                        break;
+                                        case DialogInterface.BUTTON_NEGATIVE:
+                                            break;
+                                    }
                                 }
-                            }
-                        };
-                        AlertDialog.Builder builder5 = new AlertDialog.Builder(getContext());
-                        builder5.setMessage("Activate Account of " + user + "?").setPositiveButton("Yes", dialogClickListener5)
-                                .setNegativeButton("No", dialogClickListener5).show();
-                        break;
+                            };
+                            AlertDialog.Builder builder5 = new AlertDialog.Builder(getContext());
+                            builder5.setMessage("Activate Account of " + user + "?").setPositiveButton("Yes", dialogClickListener5)
+                                    .setNegativeButton("No", dialogClickListener5).show();
+                            break;
+
+                    }
+                }
+
+                @Override
+                public void dataExists(DataSnapshot dataSnapshot) {
 
                 }
-            }
 
-            @Override
-            public void dataExists(DataSnapshot dataSnapshot) {
+                @Override
+                public void onStart() {
 
-            }
+                }
 
-            @Override
-            public void onStart() {
+                @Override
+                public void onFailure() {
 
-            }
-
-            @Override
-            public void onFailure() {
-
-            }
-        });
-
+                }
+            });
+        }
     }
 
     public void populateAccountCards(){

@@ -51,7 +51,6 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.Operat
     public void onBindViewHolder(@NonNull OperatorViewHolder holder, int position) {
         FishpondOperator operator = fishpondOperator.get(position);
         holder.text_name.setText("Name: " + operator.getFullName());
-        holder.text_opnum.setText("Operator #: " + (int) operator.getOperator_number());
         holder.text_flanum.setText("FLA #: " + operator.getFla_number());
         holder.text_address.setText("Address: " + operator.getAddress());
         if(operator.isIsActive()){
@@ -90,7 +89,7 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.Operat
                             if ((statusFilter == 1 && item.isIsActive()) || (statusFilter == 2 && !item.isIsActive()))
                                 filteredList.add(item);
                         case 1:
-                            if ((String.valueOf(item.getOperator_number()).contains(filterPattern)) && (statusFilter == 0 || (statusFilter == 1 && item.isIsActive()) || (statusFilter == 2 && !item.isIsActive())))
+                            if ((item.getBarangay().toLowerCase().contains(filterPattern)) && (statusFilter == 0 || (statusFilter == 1 && item.isIsActive()) || (statusFilter == 2 && !item.isIsActive())))
                                 filteredList.add(item);
                             break;
                         case 2:
@@ -143,7 +142,6 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.Operat
             super(itemView);
             this.operatorTapListener = tapListener;
             text_name = itemView.findViewById(R.id.op_name);
-            text_opnum = itemView.findViewById(R.id.op_opnum);
             text_status = itemView.findViewById(R.id.op_status);
             text_address = itemView.findViewById(R.id.op_address);
             text_flanum = itemView.findViewById(R.id.op_flanum);

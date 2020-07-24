@@ -71,7 +71,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private long fla_num;
     private boolean isAdmin;
     private FishpondOperator operator;
-    private TextView opnum, opname, opfla, opsim1, opsim2, opaddress, opsize, opissuance, opexpiry, opdetails, opstatus, dataAnalysis;
+    private TextView opname, opfla, opsim1, opsim2, opaddress, opsize, opissuance, opexpiry, opdetails, opstatus, dataAnalysis;
     private ConstraintLayout opdetails_short;
     private ExpandableLayout expandableLayout, expandableLayout2, expandableLayout3;
     private List<FishpondRecord> recordList;
@@ -165,7 +165,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
 
         opstatus = view.findViewById(R.id.profile_opstatus);
-        opnum = view.findViewById(R.id.profile_opnum);
         opname = view.findViewById(R.id.profile_opname);
         opfla = view.findViewById(R.id.profile_opfla);
         opaddress = view.findViewById(R.id.profile_address);
@@ -180,7 +179,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             @Override
             public void dataRetrieved(final DataSnapshot dataSnapshot) {
                 operator = new FishpondOperator((Map<String, Object>)dataSnapshot.getValue());
-                opnum.setText(String.valueOf(operator.getOperator_number()));
                 opfla.setText(String.valueOf(operator.getFla_number()));
                 opname.setText(operator.getFullName());
                 opaddress.setText(operator.getAddress());
