@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.adzu.bfarmobile.R;
+
+import net.cachapa.expandablelayout.ExpandableLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -55,6 +58,29 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
         Account account = this.account.get(position);
         holder.text_name.setText("Name: " + account.getFirstname() + " " + account.getMiddlename() + " " + account.getLastname());
         holder.text_username.setText("Username: " + account.getUsername());
+        holder.account_activated_by.setText(account.getActivated_by());
+        holder.account_deactivated_by.setText(account.getDeactivated_by());
+        holder.account_madeadmin_by.setText(account.getMade_admin_by());
+        holder.account_removedadmin_by.setText(account.getRemoved_admin_by());
+        holder.account_fla.setText(String.valueOf(account.getFla_number()));
+        holder.account_sim1.setText(account.getSim1());
+        holder.account_sim2.setText(account.getSim2());
+
+        if(account.getActivated_by().equals("NONE"))
+            holder.l1.setVisibility(View.GONE);
+        if(account.getDeactivated_by().equals("NONE"))
+            holder.l2.setVisibility(View.GONE);
+        if(account.getMade_admin_by().equals("NONE"))
+            holder.l3.setVisibility(View.GONE);
+        if(account.getRemoved_admin_by().equals("NONE"))
+            holder.l4.setVisibility(View.GONE);
+        if(account.getFla_number() == -25565)
+            holder.l5.setVisibility(View.GONE);
+        if(account.getSim1().equals("NONE"))
+            holder.l6.setVisibility(View.GONE);
+        if(account.getSim2().equals("NONE"))
+            holder.l7.setVisibility(View.GONE);
+
         if(account.isActivated()){
             holder.text_status1.setText("APPROVED");
             holder.text_status1.setBackgroundResource(R.color.colorActive);
@@ -149,6 +175,11 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
         Button button_right; // Admin | Activate
         AccountListClickListener clickListener;
 
+        TextView account_activated_by, account_madeadmin_by, account_removedadmin_by, account_deactivated_by, account_fla, account_sim1, account_sim2;
+        ExpandableLayout expandableLayout;
+
+        LinearLayout l1, l2, l3, l4, l5, l6, l7;
+
         public AccountViewHolder(@NonNull View itemView, AccountListClickListener clickListener) {
             super(itemView);
             this.clickListener = clickListener;
@@ -160,6 +191,33 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
             text_status3 = itemView.findViewById(R.id.acc_status3);
             button_left = itemView.findViewById(R.id.button_left);
             button_right = itemView.findViewById(R.id.button_right);
+
+            account_activated_by = itemView.findViewById(R.id.account_activated_by);
+            account_deactivated_by = itemView.findViewById(R.id.account_deactivated_by);
+            account_madeadmin_by = itemView.findViewById(R.id.account_madeadmin_by);
+            account_removedadmin_by = itemView.findViewById(R.id.account_removedadmin_by);
+            account_fla = itemView.findViewById(R.id.account_fla);
+            account_sim1 = itemView.findViewById(R.id.account_sim1);
+            account_sim2 = itemView.findViewById(R.id.account_sim2);
+
+            l1 = itemView.findViewById(R.id.activated_container);
+            l2 = itemView.findViewById(R.id.deactivated_container);
+            l3 = itemView.findViewById(R.id.madeadmin_container);
+            l4 = itemView.findViewById(R.id.removedadmin_container);
+            l5 = itemView.findViewById(R.id.fla_container);
+            l6 = itemView.findViewById(R.id.sim1_container);
+            l7 = itemView.findViewById(R.id.sim2_container);
+
+            expandableLayout = itemView.findViewById(R.id.expandable_layout1);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(!expandableLayout.isExpanded())
+                        expandableLayout.expand();
+                    else
+                        expandableLayout.collapse();
+                }
+            });
 
             button_left.setOnClickListener(this);
             button_right.setOnClickListener(this);

@@ -265,7 +265,7 @@ public class AddOperatorFragment extends Fragment implements Spinner.OnItemSelec
                 String f8 = op_size.getText().toString();
                 String f9 = issuance_date.getText().toString();
                 String f10 = expiry_date.getText().toString();
-                if(!op_sim1.isValid() || !op_sim2.isValid()) {
+                if (!op_sim1.isValid() || !op_sim2.isValid()) {
                     Toast.makeText(view.getContext(), "Please enter valid phone number", Toast.LENGTH_LONG).show();
                 } else {
                     f6 = op_sim1.getNumber();
@@ -288,33 +288,20 @@ public class AddOperatorFragment extends Fragment implements Spinner.OnItemSelec
                         operator.setFishpond_size(f8);
                         operator.setIssuance_date(f9);
                         operator.setExpiration_date(f10);
+                        String id = ref.push().getKey();
+                        ref.child(id).setValue(operator);
+                        Toast.makeText(view.getContext(), "Operator Registered!", Toast.LENGTH_LONG).show();
+                        ((EditText) ((LinearLayout) op_sim1.getChildAt(0)).getChildAt(1)).setText("");
+                        ((EditText) ((LinearLayout) op_sim2.getChildAt(0)).getChildAt(1)).setText("");
 
-                        AsyncTask.execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                while (count == -1) {
-                                }
-                                String id = ref.push().getKey();
-                                ref.child(id).setValue(operator);
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(view.getContext(), "Operator Registered!", Toast.LENGTH_LONG).show();
-                                        ((EditText) ((LinearLayout) op_sim1.getChildAt(0)).getChildAt(1)).setText("");
-                                        ((EditText) ((LinearLayout) op_sim2.getChildAt(0)).getChildAt(1)).setText("");
-
-                                        op_firstname.setText("");
-                                        op_middlename.setText("");
-                                        op_lastname.setText("");
-                                        op_fla.setText("");
-                                        op_barangay.setText("");
-                                        op_size.setText("");
-                                        issuance_date.setText("");
-                                        expiry_date.setText("");
-                                    }
-                                });
-                            }
-                        });
+                        op_firstname.setText("");
+                        op_middlename.setText("");
+                        op_lastname.setText("");
+                        op_fla.setText("");
+                        op_barangay.setText("");
+                        op_size.setText("");
+                        issuance_date.setText("");
+                        expiry_date.setText("");
                     }
                 }
             }
