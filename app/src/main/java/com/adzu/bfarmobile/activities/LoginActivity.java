@@ -1,5 +1,6 @@
 package com.adzu.bfarmobile.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -24,6 +25,9 @@ import com.adzu.bfarmobile.entities.Account;
 import com.adzu.bfarmobile.entities.ConnectivityListener;
 import com.adzu.bfarmobile.entities.DatabaseUtil;
 import com.adzu.bfarmobile.entities.OnGetDataListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -49,12 +53,13 @@ public class LoginActivity extends AppCompatActivity {
     private TimerTask timerTask;
     private CountDownTimer timer2;
     private boolean activityActive;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        mAuth = FirebaseAuth.getInstance();
         activityActive = true;
 
         if(ref == null)
@@ -104,6 +109,16 @@ public class LoginActivity extends AppCompatActivity {
             field_pass.requestFocus();
         }
         else{
+            mAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if(task.isSuccessful()) {
+                        Log.d("Test", "Signin success");
+                    } else {
+                        Log.d("test", "onComplete: log unsuccessful");
+                    }
+                }
+            });
             button_login.setEnabled(false);
             button_signup.setEnabled(false);
             progressBar.setVisibility(View.VISIBLE);

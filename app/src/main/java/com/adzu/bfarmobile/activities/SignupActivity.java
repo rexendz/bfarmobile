@@ -30,6 +30,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import net.rimoto.intlphoneinput.IntlPhoneInput;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class SignupActivity extends AppCompatActivity {
     private ConstraintLayout signupLayout;
@@ -138,39 +141,49 @@ public class SignupActivity extends AppCompatActivity {
                     if (!switch1.isChecked() || (operatorValid && switch1.isChecked())) {
                         mProgress.show();
                         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("account");
-                        ref.orderByChild("username").equalTo(field_user.getText().toString()).addValueEventListener(new ValueEventListener() {
+                        ref.addListenerForSingleValueEvent(new ValueEventListener() {
 
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.exists() && !field_user.getText().toString().isEmpty()) {
+                                boolean usernameTaken = false;
+                                boolean flaTaken = false;
+                                for (DataSnapshot snap : dataSnapshot.getChildren()){
+                                    if(snap.getValue(Account.class).getUsername().equals(user.getUsername())){
+                                        usernameTaken = true;
+                                    }
+                                    if(snap.getValue(Account.class).getFla_number() == user.getFla_number()){
+                                        flaTaken = true;
+                                    }
+                                }
+                                if (usernameTaken) {
                                     field_user.setError("Username Already Taken");
                                     field_user.requestFocus();
                                     mProgress.dismiss();
+                                } else if (flaTaken) {
+                                    fla.setError("FLA Number Already Taken");
+                                    fla.requestFocus();
+                                    mProgress.dismiss();
                                 } else {
-                                    if (!field_user.getText().toString().isEmpty()) {
-                                        user.setPasswordHashed();
-                                        String id = databaseReference.push().getKey();
-                                        databaseReference.child(id).setValue(user);
-                                        user.setUsername(null);
-                                        user.setPassword(null);
+                                    user.setPasswordHashed();
+                                    String id = databaseReference.push().getKey();
+                                    databaseReference.child(id).setValue(user);
+                                    user.setUsername(null);
+                                    user.setPassword(null);
 
-                                        field_user.setText("");
+                                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                                    alert.setTitle("BFAR Registration");
+                                    alert.setMessage("Account Successfully Created!\nPlease contact the administrators for account activation.");
+                                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
-                                        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                                        alert.setTitle("BFAR Registration");
-                                        alert.setMessage("Account Successfully Created!\nPlease contact the administrators for account activation.");
-                                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                Intent intent = new Intent(getContext(), LoginActivity.class);
-                                                startActivity(intent);
-                                                finish();
-                                            }
-                                        });
-                                        mProgress.dismiss();
-                                        alert.show();
-                                    }
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            Intent intent = new Intent(getContext(), LoginActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    });
+                                    mProgress.dismiss();
+                                    alert.show();
                                 }
 
                             }

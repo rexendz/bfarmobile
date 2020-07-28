@@ -288,20 +288,58 @@ public class AddOperatorFragment extends Fragment implements Spinner.OnItemSelec
                         operator.setFishpond_size(f8);
                         operator.setIssuance_date(f9);
                         operator.setExpiration_date(f10);
-                        String id = ref.push().getKey();
-                        ref.child(id).setValue(operator);
-                        Toast.makeText(view.getContext(), "Operator Registered!", Toast.LENGTH_LONG).show();
-                        ((EditText) ((LinearLayout) op_sim1.getChildAt(0)).getChildAt(1)).setText("");
-                        ((EditText) ((LinearLayout) op_sim2.getChildAt(0)).getChildAt(1)).setText("");
 
-                        op_firstname.setText("");
-                        op_middlename.setText("");
-                        op_lastname.setText("");
-                        op_fla.setText("");
-                        op_barangay.setText("");
-                        op_size.setText("");
-                        issuance_date.setText("");
-                        expiry_date.setText("");
+                        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().child("operator");
+                        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                boolean flaTaken = false;
+                                boolean sim1Taken = false;
+                                boolean sim2Taken = false;
+                                for (DataSnapshot snap : snapshot.getChildren()){
+                                    if(snap.getValue(FishpondOperator.class).getFla_number() == operator.getFla_number()){
+                                        flaTaken = true;
+                                    }
+                                    if(snap.getValue(FishpondOperator.class).getSim1().equals(operator.getSim1())){
+                                        sim1Taken = true;
+                                    }
+                                    if(snap.getValue(FishpondOperator.class).getSim2().equals(operator.getSim2())){
+                                        sim2Taken = true;
+                                    }
+                                }
+                                if(flaTaken){
+                                    op_fla.setError("FLA Number Already Taken!");
+                                    op_fla.requestFocus();
+                                } else if (sim1Taken) {
+                                    Toast.makeText(getContext(), "Sim 1 already taken", Toast.LENGTH_LONG).show();
+                                    op_sim2.requestFocus();
+                                } else if (sim2Taken) {
+                                    Toast.makeText(getContext(), "Sim 2 already taken", Toast.LENGTH_LONG).show();
+                                    op_sim2.requestFocus();
+                                } else {
+
+                                    String id = ref.push().getKey();
+                                    ref.child(id).setValue(operator);
+                                    Toast.makeText(getContext(), "Operator Registered!", Toast.LENGTH_LONG).show();
+                                    ((EditText) ((LinearLayout) op_sim1.getChildAt(0)).getChildAt(1)).setText("");
+                                    ((EditText) ((LinearLayout) op_sim2.getChildAt(0)).getChildAt(1)).setText("");
+
+                                    op_firstname.setText("");
+                                    op_middlename.setText("");
+                                    op_lastname.setText("");
+                                    op_fla.setText("");
+                                    op_barangay.setText("");
+                                    op_size.setText("");
+                                    issuance_date.setText("");
+                                    expiry_date.setText("");
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
                     }
                 }
             }

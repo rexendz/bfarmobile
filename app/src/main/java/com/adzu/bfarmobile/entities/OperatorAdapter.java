@@ -53,6 +53,7 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.Operat
         holder.text_name.setText("Name: " + operator.getFullName());
         holder.text_flanum.setText("FLA #: " + operator.getFla_number());
         holder.text_address.setText("Address: " + operator.getAddress());
+        holder.text_opnum.setText("Operator #: " + operator.getSim1());
         if(operator.isIsActive()){
             holder.text_status.setText("Active");
             holder.text_status.setBackgroundResource(R.color.colorActive);
@@ -97,11 +98,11 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.Operat
                                 filteredList.add(item);
                             break;
                         case 3:
-                            if ((item.getFirstname().toLowerCase().contains(filterPattern)) && (statusFilter == 0 || (statusFilter == 1 && item.isIsActive()) || (statusFilter == 2 && !item.isIsActive())))
+                            if ((item.getFullName().toLowerCase().contains(filterPattern)) && (statusFilter == 0 || (statusFilter == 1 && item.isIsActive()) || (statusFilter == 2 && !item.isIsActive())))
                                 filteredList.add(item);
                             break;
                         case 4:
-                            if ((item.getLastname().toLowerCase().contains(filterPattern)) && (statusFilter == 0 || (statusFilter == 1 && item.isIsActive()) || (statusFilter == 2 && !item.isIsActive())))
+                            if ((item.getSim1().contains(filterPattern)) && (statusFilter == 0 || (statusFilter == 1 && item.isIsActive()) || (statusFilter == 2 && !item.isIsActive())))
                                 filteredList.add(item);
                             break;
                         case 5:
@@ -145,6 +146,7 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.Operat
             text_status = itemView.findViewById(R.id.op_status);
             text_address = itemView.findViewById(R.id.op_address);
             text_flanum = itemView.findViewById(R.id.op_flanum);
+            text_opnum = itemView.findViewById(R.id.op_simnum);
 
             itemView.setOnClickListener(this);
 

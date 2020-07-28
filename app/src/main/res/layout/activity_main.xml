@@ -111,20 +111,20 @@
                             android:orientation="horizontal">
 
                             <RadioButton
-                                android:id="@+id/filter_fname"
+                                android:id="@+id/filter_name"
                                 android:layout_width="120dp"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/product_sans"
-                                android:text="First Name"
+                                android:text="Operator Name"
                                 android:textColor="#FFFFFF"
                                 android:textSize="12sp" />
 
                             <RadioButton
-                                android:id="@+id/filter_lname"
+                                android:id="@+id/filter_number"
                                 android:layout_width="120dp"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/product_sans"
-                                android:text="Last Name"
+                                android:text="Operator #"
                                 android:textColor="#FFFFFF"
                                 android:textSize="12sp" />
 
