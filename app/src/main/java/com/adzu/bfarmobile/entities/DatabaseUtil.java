@@ -16,6 +16,22 @@ import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 public class DatabaseUtil {
+
+    private static DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+    private static boolean isConnected = false;
+
+    private static ValueEventListener connectionListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            isConnected = snapshot.getValue(Boolean.class);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+            Log.d("FirebaseDatabase", "DatabaseError: " + error);
+        }
+    };
+
     public static void readDataByUsername(String username, final DatabaseReference ref, final OnGetDataListener listener) {
         listener.onStart();
         Query query = ref.orderByChild("username").equalTo(username);
@@ -127,25 +143,20 @@ public class DatabaseUtil {
 
     }
 
-    public static void checkConnection(final ConnectivityListener listener) {
-        listener.onStart();
-        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
-        connectedRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean connected = snapshot.getValue(Boolean.class);
-                if (connected) {
-                    listener.onConnected();
-                } else {
-                    listener.onDisconnected();
-                }
-            }
+    public static void startListeningForConnection() {
+        if (connectionListener != null) {
+            connectedRef.addValueEventListener(connectionListener);
+        }
+    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                listener.onFailure();
-            }
-        });
+    public static void stopListeningForConnection() {
+        if (connectionListener != null) {
+            connectedRef.removeEventListener(connectionListener);
+        }
+    }
+
+    public static boolean isConnected() {
+        return isConnected;
     }
 
 }

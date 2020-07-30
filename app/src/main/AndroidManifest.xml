@@ -3,26 +3,39 @@
     package="com.adzu.bfarmobile">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <application
+        android:name=".entities.FirebaseInit"
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/bfar_icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/bfar_icon_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name="com.adzu.bfarmobile.entities.FirebaseInit"
-        android:fullBackupContent="true">
+        android:theme="@style/AppTheme">
+        <service
+            android:name=".entities.OfflineDataStorage"
+            android:exported="false"></service>
+
+        <receiver
+            android:name=".entities.OfflineDataReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
         <activity
-            android:windowSoftInputMode="adjustPan"
             android:name=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
         <activity
-            android:windowSoftInputMode="adjustPan"
             android:name=".activities.SignupActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">

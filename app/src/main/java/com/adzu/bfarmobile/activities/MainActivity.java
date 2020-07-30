@@ -1,6 +1,5 @@
 package com.adzu.bfarmobile.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,7 +25,6 @@ import com.adzu.bfarmobile.entities.DatabaseUtil;
 import com.adzu.bfarmobile.entities.OnGetDataListener;
 import com.adzu.bfarmobile.fragments.AccountFragment;
 import com.adzu.bfarmobile.fragments.AddOperatorFragment;
-import com.adzu.bfarmobile.fragments.AddRecordFragment;
 import com.adzu.bfarmobile.fragments.ListFragment;
 import com.adzu.bfarmobile.fragments.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
@@ -51,9 +49,6 @@ import net.cachapa.expandablelayout.ExpandableLayout;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, RadioGroup.OnCheckedChangeListener {
 
@@ -71,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AddOperatorFragment fragment2;
     private AccountFragment fragment3;
     private ProfileFragment fragment4;
-    private AddRecordFragment fragment5;
     private FrameLayout fragmentContainer;
     private String lastSearchText = "";
     private Toolbar toolbar;
@@ -128,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragment1 = new ListFragment();
             fragment2 = new AddOperatorFragment();
             fragment3 = new AccountFragment();
-            fragment5 = new AddRecordFragment();
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment1).commit();
             fragmentTransaction.addToBackStack("FRAGMENT1");
@@ -422,17 +415,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragmentTransaction.addToBackStack("FRAGMENT3");
                 hideSearchView();
                 toolbar.setTitle("Manage Accounts");
-                break;
-            case R.id.nav_addrecord:
-                fragmentContainer.setPadding(0, 0, 0, 0);
-                expandableLayout.collapse();;
-                fragment1.setActive(false);
-                fragment3.setActive(false);
-                fragmentTransaction.replace(R.id.fragment_container, fragment5, "FRAGMENT5");
-                fragmentTransaction.commit();
-                fragmentTransaction.addToBackStack("FRAGMENT5");
-                hideSearchView();
-                toolbar.setTitle("Add Record");
                 break;
             case R.id.nav_logout:
                 Toast.makeText(getApplicationContext(), "Logged Out", Toast.LENGTH_LONG).show();

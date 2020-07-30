@@ -3,10 +3,13 @@ package com.adzu.bfarmobile.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
-import android.app.Activity;
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -22,7 +25,6 @@ import android.widget.Toast;
 
 import com.adzu.bfarmobile.R;
 import com.adzu.bfarmobile.entities.Account;
-import com.adzu.bfarmobile.entities.ConnectivityListener;
 import com.adzu.bfarmobile.entities.DatabaseUtil;
 import com.adzu.bfarmobile.entities.OnGetDataListener;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -41,6 +43,7 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final int MY_PERMISSIONS_REQUEST_RECEIVE_SMS = 0;
     private ConstraintLayout rootLayout;
     private AnimationDrawable animDrawable;
     private ProgressBar progressBar;
@@ -59,15 +62,25 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECEIVE_SMS)) {
+
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
+            }
+        }
+
         mAuth = FirebaseAuth.getInstance();
         activityActive = true;
 
-        if(ref == null)
+        if (ref == null)
             ref = FirebaseDatabase.getInstance().getReference();
         connection_status = findViewById(R.id.text_connection);
         connection_status.setVisibility(View.INVISIBLE);
-
+        DatabaseUtil.startListeningForConnection();
         isConnected = isNetworkAvailable() ? 1 : 0;
+
         if(isConnected == 0) {
             connection_status.setText("OFFLINE MODE");
             Toast.makeText(getApplicationContext(), "Offline mode", Toast.LENGTH_LONG).show();
@@ -85,14 +98,27 @@ public class LoginActivity extends AppCompatActivity {
         button_signup = findViewById(R.id.button_signup);
 
     }
-        private boolean isNetworkAvailable() {
-            ConnectivityManager connectivityManager
-                    = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-        }
 
-    public void login_action(View view){
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_RECEIVE_SMS:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "Permission Denied. Access to SMS is required to be able to receive fishpond data offline from BFAR", Toast.LENGTH_LONG).show();
+                }
+        }
+    }
+
+    public void login_action(View view) {
         loginSuccess = false;
 
         final EditText field_user = findViewById(R.id.field_user);
@@ -100,19 +126,17 @@ public class LoginActivity extends AppCompatActivity {
         final String username = field_user.getText().toString();
         final String password = field_pass.getText().toString();
 
-        if(username.isEmpty()){
+        if (username.isEmpty()) {
             field_user.setError("Please Enter Username");
             field_user.requestFocus();
-        }
-        else if(password.isEmpty()){
+        } else if (password.isEmpty()) {
             field_pass.setError("Please Enter Password");
             field_pass.requestFocus();
-        }
-        else{
+        } else {
             mAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    if(task.isSuccessful()) {
+                    if (task.isSuccessful()) {
                         Log.d("Test", "Signin success");
                     } else {
                         Log.d("test", "onComplete: log unsuccessful");
@@ -124,8 +148,8 @@ public class LoginActivity extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
             DatabaseUtil.readDataByUsername(username, ref.child("account"), new OnGetDataListener() {
                 @Override
-                public void dataExists(DataSnapshot dataSnapshot){
-                    if(!dataSnapshot.exists()){
+                public void dataExists(DataSnapshot dataSnapshot) {
+                    if (!dataSnapshot.exists()) {
                         Toast.makeText(getApplicationContext(), "Username Does Not Exist!", Toast.LENGTH_LONG).show();
                         button_login.setEnabled(true);
                         button_signup.setEnabled(true);
@@ -145,12 +169,12 @@ public class LoginActivity extends AppCompatActivity {
                             loginSuccess = true;
                             Toast.makeText(getApplicationContext(), "Login Success!", Toast.LENGTH_LONG).show();
 
-                            if(connectTimer != null) {
+                            if (connectTimer != null) {
                                 connectTimer.cancel();
                                 connectTimer = null;
                                 isConnected = -1;
                             }
-                            if(timer2 != null){
+                            if (timer2 != null) {
                                 timer2.cancel();
                                 timer2 = null;
                             }
@@ -187,54 +211,36 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onStart() {
+                    if (!DatabaseUtil.isConnected()) {
+                        if (activityActive) {
+                            Log.d("TEST", "OFFLINE MODE");
+                            timer2 = new CountDownTimer(5000, 100) {
 
-                    DatabaseUtil.checkConnection(new ConnectivityListener() {
-                        @Override
-                        public void onConnected() {
-                        }
-
-                        @Override
-                        public void onDisconnected() {
-                            if (activityActive) {
-                                Log.d("TEST", "OFFLINE MODE");
-                                timer2 = new CountDownTimer(5000, 100) {
-
-                                    @Override
-                                    public void onTick(long l) {
-                                        if (loginSuccess) {
-                                            Log.d("Test", "login success, cancelling timer");
-                                        }
+                                @Override
+                                public void onTick(long l) {
+                                    if (loginSuccess) {
+                                        Log.d("Test", "login success, cancelling timer");
                                     }
+                                }
 
-                                    @Override
-                                    public void onFinish() {
-                                        if (!loginSuccess) {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    Toast.makeText(getApplicationContext(), "Failed to retrieve data! You must first login the app with an internet connection at least once to have offline capabilities.", Toast.LENGTH_LONG).show();
-                                                    button_login.setEnabled(true);
-                                                    button_signup.setEnabled(true);
-                                                    progressBar.setVisibility(View.INVISIBLE);
-                                                }
-                                            });
-                                        }
+                                @Override
+                                public void onFinish() {
+                                    if (!loginSuccess) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getApplicationContext(), "Failed to retrieve data! You must first login the app with an internet connection at least once to have offline capabilities.", Toast.LENGTH_LONG).show();
+                                                button_login.setEnabled(true);
+                                                button_signup.setEnabled(true);
+                                                progressBar.setVisibility(View.INVISIBLE);
+                                            }
+                                        });
                                     }
-                                }.start();
-                            }
+                                }
+                            }.start();
                         }
-
-                        @Override
-                        public void onFailure() {
-
-                        }
-
-                        @Override
-                        public void onStart() {
-
-                        }
-                    });
                     }
+                }
 
                 @Override
                 public void onFailure() {
@@ -259,54 +265,33 @@ public class LoginActivity extends AppCompatActivity {
 
         initializeTimerTask();
 
-        connectTimer.scheduleAtFixedRate(timerTask, 2000, 1000);
+        connectTimer.scheduleAtFixedRate(timerTask, 3000, 100);
     }
 
     private void initializeTimerTask() {
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                DatabaseUtil.checkConnection(new ConnectivityListener() {
-                    @Override
-                    public void onConnected() {
-                        if (isConnected == 0) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getApplicationContext(), "Connection Established", Toast.LENGTH_LONG).show();
-                                    connection_status.setVisibility(View.INVISIBLE);
-                                    isConnected = 1;
-                                }
-                            });
+                if (DatabaseUtil.isConnected() && isConnected == 0) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "Connection Established", Toast.LENGTH_LONG).show();
+                            connection_status.setVisibility(View.INVISIBLE);
+                            isConnected = 1;
                         }
-                    }
-
-                    @Override
-                    public void onDisconnected() {
-                        if (isConnected == 1) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    connection_status.setText("OFFLINE MODE");
-                                    Toast.makeText(getApplicationContext(), "Connection Lost! Offline mode activated", Toast.LENGTH_LONG).show();
-                                    connection_status.setVisibility(View.VISIBLE);
-                                    isConnected = 0;
-                                }
-                            });
-
+                    });
+                } else if (!DatabaseUtil.isConnected() && isConnected == 1) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            connection_status.setText("OFFLINE MODE");
+                            Toast.makeText(getApplicationContext(), "Connection Lost! Offline mode activated", Toast.LENGTH_LONG).show();
+                            connection_status.setVisibility(View.VISIBLE);
+                            isConnected = 0;
                         }
-                    }
-
-                    @Override
-                    public void onFailure() {
-
-                    }
-
-                    @Override
-                    public void onStart() {
-
-                    }
-                });
+                    });
+                }
             }
         };
 
@@ -315,36 +300,21 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        if(connectTimer != null) {
+        if (connectTimer != null) {
             connectTimer.cancel();
             connectTimer = null;
         }
         super.onPause();
     }
 
-    public void signup_action(View view){
+    public void signup_action(View view) {
         final Intent myIntent = new Intent(this, SignupActivity.class);
-        DatabaseUtil.checkConnection(new ConnectivityListener() {
-            @Override
-            public void onConnected() {
-                startActivity(myIntent);
-            }
 
-            @Override
-            public void onDisconnected() {
-                Toast.makeText(getApplicationContext(), "App is in offline mode. Connect to the internet to access this feature", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure() {
-
-            }
-
-            @Override
-            public void onStart() {
-
-            }
-        });
+        if (DatabaseUtil.isConnected()) {
+            startActivity(myIntent);
+        } else {
+            Toast.makeText(getApplicationContext(), "App is in offline mode. Connect to the internet to access this feature", Toast.LENGTH_LONG).show();
+        }
     }
 
 }

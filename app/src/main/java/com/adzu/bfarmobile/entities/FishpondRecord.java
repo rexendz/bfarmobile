@@ -1,13 +1,16 @@
 package com.adzu.bfarmobile.entities;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class FishpondRecord {
+public class FishpondRecord implements Parcelable {
 
     private float ph_level;
     private float salinity;
@@ -15,6 +18,35 @@ public class FishpondRecord {
     private float do_level;
     private String sim_number;
     private Long timestamp;
+
+    public FishpondRecord(){
+
+    }
+
+    protected FishpondRecord(Parcel in) {
+        ph_level = in.readFloat();
+        salinity = in.readFloat();
+        temperature = in.readFloat();
+        do_level = in.readFloat();
+        sim_number = in.readString();
+        if (in.readByte() == 0) {
+            timestamp = null;
+        } else {
+            timestamp = in.readLong();
+        }
+    }
+
+    public static final Creator<FishpondRecord> CREATOR = new Creator<FishpondRecord>() {
+        @Override
+        public FishpondRecord createFromParcel(Parcel in) {
+            return new FishpondRecord(in);
+        }
+
+        @Override
+        public FishpondRecord[] newArray(int size) {
+            return new FishpondRecord[size];
+        }
+    };
 
     public Long getTimestamp() { return timestamp;}
 
@@ -63,4 +95,23 @@ public class FishpondRecord {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeFloat(ph_level);
+        parcel.writeFloat(salinity);
+        parcel.writeFloat(temperature);
+        parcel.writeFloat(do_level);
+        parcel.writeString(sim_number);
+        if (timestamp == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeLong(timestamp);
+        }
+    }
 }
