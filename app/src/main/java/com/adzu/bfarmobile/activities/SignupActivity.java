@@ -142,7 +142,7 @@ public class SignupActivity extends AppCompatActivity {
                                 if (snap.getValue(Account.class).getUsername().equals(user.getUsername())) {
                                     usernameTaken = true;
                                 }
-                                if (snap.getValue(Account.class).getFla_number() == user.getFla_number()) {
+                                if (snap.getValue(Account.class).getFla_number() == user.getFla_number() && user.getFla_number() > 0) {
                                     flaTaken = true;
                                 }
                             }

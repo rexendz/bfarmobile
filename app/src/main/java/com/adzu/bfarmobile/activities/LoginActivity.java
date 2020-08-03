@@ -72,6 +72,17 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         mAuth = FirebaseAuth.getInstance();
+        mAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    Log.d("Test", "Signin success");
+                } else {
+                    Log.d("test", "onComplete: log unsuccessful");
+                }
+            }
+        });
+
         activityActive = true;
 
         if (ref == null)
@@ -133,16 +144,6 @@ public class LoginActivity extends AppCompatActivity {
             field_pass.setError("Please Enter Password");
             field_pass.requestFocus();
         } else {
-            mAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        Log.d("Test", "Signin success");
-                    } else {
-                        Log.d("test", "onComplete: log unsuccessful");
-                    }
-                }
-            });
             button_login.setEnabled(false);
             button_signup.setEnabled(false);
             progressBar.setVisibility(View.VISIBLE);
