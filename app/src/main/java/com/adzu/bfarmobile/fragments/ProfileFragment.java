@@ -315,6 +315,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 }
                 if(!recordList.isEmpty()) {
                     ((TextView)view.findViewById(R.id.no_data)).setVisibility(View.GONE);
+                    ((TableRow)view.findViewById(R.id.latest_data1)).setVisibility(View.VISIBLE);
                     latestRecord = recordList.get(0);
                     if (recordList.size() > 1) {
                         try {

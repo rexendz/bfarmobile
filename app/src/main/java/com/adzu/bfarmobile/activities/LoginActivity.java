@@ -56,7 +56,6 @@ public class LoginActivity extends AppCompatActivity {
     private TimerTask timerTask;
     private CountDownTimer timer2;
     private boolean activityActive;
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,18 +69,6 @@ public class LoginActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
             }
         }
-
-        mAuth = FirebaseAuth.getInstance();
-        mAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Log.d("Test", "Signin success");
-                } else {
-                    Log.d("test", "onComplete: log unsuccessful");
-                }
-            }
-        });
 
         activityActive = true;
 

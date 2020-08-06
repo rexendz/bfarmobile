@@ -48,10 +48,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginRight="32dp"
-                android:background="@color/colorActive"
+                android:background="@color/colorOperator"
                 android:fontFamily="@font/product_sans"
                 android:gravity="center_horizontal"
-                android:text="ACTIVE"
+                android:text="LOADING"
                 android:textAlignment="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:textColor="#FFFFFF"
@@ -92,7 +92,7 @@
                 android:layout_marginLeft="4dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/product_sans"
-                android:text="Rex Christian Royo Endozo"
+                android:text=""
                 android:textColor="#212121"
                 app:layout_constraintStart_toEndOf="@+id/textView27"
                 app:layout_constraintTop_toBottomOf="@+id/profile_opfla" />
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:fontFamily="@font/product_sans"
-                android:text="1337"
+                android:text=""
                 android:textColor="#212121"
                 app:layout_constraintStart_toEndOf="@+id/textView29"
                 app:layout_constraintTop_toTopOf="@id/textView29" />
@@ -382,7 +382,7 @@
 
                 <TextView
                     android:id="@+id/no_data"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -391,6 +391,7 @@
                     />
 
                 <TableRow
+                    android:visibility="gone"
                     android:id="@+id/latest_data1"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
@@ -506,7 +507,7 @@
         </net.cachapa.expandablelayout.ExpandableLayout>
 
         <TextView
-            android:visibility="gone"
+            android:visibility="visible"
             android:id="@+id/norecord"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

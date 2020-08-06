@@ -138,6 +138,8 @@ public class SignupActivity extends AppCompatActivity {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             boolean usernameTaken = false;
                             boolean flaTaken = false;
+                            boolean sim1Taken = false;
+                            boolean sim2Taken = false;
                             for (DataSnapshot snap : dataSnapshot.getChildren()) {
                                 if (snap.getValue(Account.class).getUsername().equals(user.getUsername())) {
                                     usernameTaken = true;
@@ -145,6 +147,13 @@ public class SignupActivity extends AppCompatActivity {
                                 if (snap.getValue(Account.class).getFla_number() == user.getFla_number() && user.getFla_number() > 0) {
                                     flaTaken = true;
                                 }
+                                if (snap.getValue(Account.class).getSim1() == user.getSim1()) {
+                                    sim1Taken = true;
+                                }
+                                if (snap.getValue(Account.class).getSim2() == user.getSim2()) {
+                                    sim2Taken = true;
+                                }
+
                             }
                             if (usernameTaken) {
                                 field_user.setError("Username Already Taken");
@@ -153,6 +162,14 @@ public class SignupActivity extends AppCompatActivity {
                             } else if (flaTaken) {
                                 fla.setError("FLA Number Already Taken");
                                 fla.requestFocus();
+                                mProgress.dismiss();
+                            } else if (sim1Taken) {
+                                Toast.makeText(getContext(), "Sim 1 number already taken", Toast.LENGTH_LONG).show();
+                                sim1.requestFocus();
+                                mProgress.dismiss();
+                            } else if (sim2Taken) {
+                                Toast.makeText(getContext(), "Sim 2 number already taken", Toast.LENGTH_LONG).show();
+                                sim2.requestFocus();
                                 mProgress.dismiss();
                             } else {
                                 user.setPasswordHashed();
