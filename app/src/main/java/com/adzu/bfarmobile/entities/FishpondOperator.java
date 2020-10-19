@@ -18,6 +18,7 @@ public class FishpondOperator {
     private String expiration_date;
     private String sim1;
     private String sim2;
+    private String comment = "None";
     private boolean isActive;
 
     private FishpondRecord[] fishpondRecords;
@@ -44,6 +45,7 @@ public class FishpondOperator {
         this.sim1 = (String) data.get("sim1");
         this.sim2 = (String) data.get("sim2");
         this.isActive = (boolean) data.get("isActive");
+        this.comment = (String) data.get("comment");
     }
 
     public void setFishpondRecords(FishpondRecord[] fishpondRecords) {
@@ -57,6 +59,14 @@ public class FishpondOperator {
     public void setSim1(String sim_number) {
 
         this.sim1 = sim_number;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public String getSim2() {

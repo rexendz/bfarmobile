@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -71,7 +73,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private long fla_num;
     private boolean isAdmin;
     private FishpondOperator operator;
-    private TextView opname, opfla, opsim1, opsim2, opaddress, opsize, opissuance, opexpiry, opdetails, opstatus, dataAnalysis;
+    private TextView opname, opfla, opsim1, opsim2, opaddress, opsize, opissuance, opexpiry, opdetails, opstatus, dataAnalysis, opcomment;
     private ConstraintLayout opdetails_short;
     private ExpandableLayout expandableLayout, expandableLayout2, expandableLayout3;
     private List<FishpondRecord> recordList;
@@ -84,7 +86,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private OperatorListListener operatorListListener;
     private ProfileAdapter profileAdapter;
     private RecyclerView recyclerView, recyclerView2;
-    private Button delete_op;
+    private Button delete_op, comment_op;
 
     public interface ProfileListListener{
         void onGetList(int count);
@@ -113,6 +115,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         table = view.findViewById(R.id.latest_data1);
         dataAnalysis = view.findViewById(R.id.data_analysis);
         delete_op = view.findViewById(R.id.button_deleteop);
+        comment_op = view.findViewById(R.id.button_commentop);
 
         recordList = new ArrayList<>();
         dataList = new ArrayList<>();
@@ -173,6 +176,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         opissuance = view.findViewById(R.id.profile_opissuance);
         opexpiry = view.findViewById(R.id.profile_opexpiry);
         opsize = view.findViewById(R.id.profile_opsize);
+        opcomment = view.findViewById(R.id.profile_opcomment);
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("operator");
         DatabaseUtil.readDataByFLA(fla_num, ref, new OnGetDataListener() {
@@ -187,6 +191,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 opissuance.setText(operator.getIssuance_date());
                 opexpiry.setText(operator.getExpiration_date());
                 opsize.setText(operator.getFishpond_size());
+                opcomment.setText(operator.getComment());
                 if(operator.isIsActive()){
                     opstatus.setText("Active");
                     opstatus.setBackgroundResource(R.color.colorActive);
@@ -197,7 +202,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 }
 
                 if(isAdmin){
+                    final Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                    final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     delete_op.setVisibility(View.VISIBLE);
+                    comment_op.setVisibility(View.VISIBLE);
                     delete_op.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -219,6 +227,30 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                             builder.setMessage("Delete This Operator Account?\nWARNING: ALL DATA WILL BE LOST").setPositiveButton("Yes", dialogClickListener)
                                     .setNegativeButton("No", dialogClickListener).show();
+                        }
+                    });
+                    comment_op.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            final View customDialogBox = getLayoutInflater().inflate(R.layout.custom_dialogbox, null);
+                            builder.setView(customDialogBox);
+                            builder.setTitle("Set Comment");
+                            builder.setPositiveButton("Set", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    EditText editText = customDialogBox.findViewById(R.id.dialog_text);
+                                    String newComment = editText.getText().toString();
+                                    dataSnapshot.getRef().child("comment").setValue(newComment);
+                                    fragmentTransaction.detach(currentFragment);
+                                    fragmentTransaction.attach(currentFragment);
+                                    fragmentTransaction.commit();
+                                    Toast.makeText(getContext(), "Comment Added!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            builder.setNegativeButton("Cancel", null);
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
                         }
                     });
                 }
@@ -315,7 +347,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 }
                 if(!recordList.isEmpty()) {
                     ((TextView)view.findViewById(R.id.no_data)).setVisibility(View.GONE);
-                    ((TableRow)view.findViewById(R.id.latest_data1)).setVisibility(View.VISIBLE);
                     latestRecord = recordList.get(0);
                     if (recordList.size() > 1) {
                         try {

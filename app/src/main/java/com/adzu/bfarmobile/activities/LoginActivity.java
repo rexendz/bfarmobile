@@ -32,8 +32,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Map;
 import java.util.Timer;
@@ -56,12 +58,14 @@ public class LoginActivity extends AppCompatActivity {
     private TimerTask timerTask;
     private CountDownTimer timer2;
     private boolean activityActive;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Ask user for SMS permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECEIVE_SMS)) {
 
@@ -69,6 +73,18 @@ public class LoginActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
             }
         }
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    Log.d("Test", "Signin success");
+                } else {
+                    Log.d("test", "onComplete: log unsuccessful");
+                }
+            }
+        });
 
         activityActive = true;
 
@@ -79,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
         DatabaseUtil.startListeningForConnection();
         isConnected = isNetworkAvailable() ? 1 : 0;
 
-        if(isConnected == 0) {
+        if (isConnected == 0) {
             connection_status.setText("OFFLINE MODE");
             Toast.makeText(getApplicationContext(), "Offline mode", Toast.LENGTH_LONG).show();
             connection_status.setVisibility(View.VISIBLE);
@@ -250,16 +266,32 @@ public class LoginActivity extends AppCompatActivity {
 
     public void startTimer() {
         connectTimer = new Timer();
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.getValue() == null) {
+                    Log.d("TEST", "AUX: connected");
+                } else {
+                    Log.d("TEST", "AUX disconnected");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         initializeTimerTask();
 
-        connectTimer.scheduleAtFixedRate(timerTask, 3000, 100);
+        connectTimer.scheduleAtFixedRate(timerTask, 1000, 100);
     }
 
     private void initializeTimerTask() {
         timerTask = new TimerTask() {
             @Override
             public void run() {
+                Log.d("TEST", "Connection: " + DatabaseUtil.isConnected());
                 if (DatabaseUtil.isConnected() && isConnected == 0) {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -298,11 +330,7 @@ public class LoginActivity extends AppCompatActivity {
     public void signup_action(View view) {
         final Intent myIntent = new Intent(this, SignupActivity.class);
 
-        if (DatabaseUtil.isConnected()) {
-            startActivity(myIntent);
-        } else {
-            Toast.makeText(getApplicationContext(), "App is in offline mode. Connect to the internet to access this feature", Toast.LENGTH_LONG).show();
-        }
+        startActivity(myIntent);
     }
 
 }

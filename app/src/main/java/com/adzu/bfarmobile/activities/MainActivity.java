@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.adzu.bfarmobile.R;
 import com.adzu.bfarmobile.entities.Account;
 import com.adzu.bfarmobile.entities.DatabaseUtil;
-import com.adzu.bfarmobile.entities.FishpondOperator;
 import com.adzu.bfarmobile.entities.OnGetDataListener;
 import com.adzu.bfarmobile.fragments.AccountFragment;
 import com.adzu.bfarmobile.fragments.AddOperatorFragment;
@@ -30,10 +29,8 @@ import com.adzu.bfarmobile.fragments.ListFragment;
 import com.adzu.bfarmobile.fragments.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import androidx.annotation.NonNull;
@@ -120,7 +117,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         user.setSim2(intent.getStringExtra("account_sim2"));
 
 
-        if (user.isAdmin()) {
+
+        if(user.isAdmin()) {
             fragment1 = new ListFragment();
             fragment2 = new AddOperatorFragment();
             fragment3 = new AccountFragment();
@@ -128,68 +126,73 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTransaction.replace(R.id.fragment_container, fragment1).commit();
             fragmentTransaction.addToBackStack("FRAGMENT1");
             showSearchView();
-        } else {
+        }
+        else {
             Menu navMenu = navigationView.getMenu();
             navMenu.findItem(R.id.nav_admin).setVisible(false);
             toolbar.setTitle("Operator Account");
-
-            new CountDownTimer(1000, 100) {
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("operator");
+            DatabaseUtil.readDataByFLA(user.getFla_number(), ref, new OnGetDataListener() {
+                @Override
+                public void dataRetrieved(DataSnapshot dataSnapshot) {
+                    startProfileFragment(user.getFla_number(), user.isAdmin());
+                    profile_exists = true;
+                }
 
                 @Override
-                public void onTick(long l) {
+                public void dataExists(DataSnapshot dataSnapshot) {
 
                 }
 
                 @Override
-                public void onFinish() {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!profile_exists) {
-                                AlertDialog.Builder alert = new AlertDialog.Builder(ctx);
-                                alert.setTitle("Operator");
-                                alert.setMessage("Account is activated but your profile is not yet created.");
-                                alert.setPositiveButton("Logout", new DialogInterface.OnClickListener() {
+                public void onStart() {
+                    new CountDownTimer(1000, 100) {
 
+                        @Override
+                        public void onTick(long l) {
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+                                runOnUiThread(new Runnable() {
                                     @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        Intent intent = new Intent(ctx, LoginActivity.class);
-                                        startActivity(intent);
-                                        finish();
+                                    public void run() {
+                                        if(!profile_exists) {
+                                            AlertDialog.Builder alert = new AlertDialog.Builder(ctx);
+                                            alert.setTitle("Operator");
+                                            alert.setMessage("Account is activated but your profile is not yet created.");
+                                            alert.setPositiveButton("Logout", new DialogInterface.OnClickListener() {
+
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    Intent intent = new Intent(ctx, LoginActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                            });
+                                            alert.setNegativeButton("Continue", null);
+                                            alert.show();
+                                        }
                                     }
                                 });
-                                alert.setNegativeButton("Continue", null);
-                                alert.show();
-                            }
                         }
-                    });
-                }
-            }.start();
+                    }.start();
 
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("operator");
-            ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot snap : snapshot.getChildren()) {
-                        if (user.getFla_number() == snap.getValue(FishpondOperator.class).getFla_number()) {
-                            startProfileFragment(user.getFla_number(), user.isAdmin());
-                            profile_exists = true;
-                        }
-                    }
                 }
 
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+                public void onFailure() {
 
                 }
             });
         }
     }
 
-    public void startProfileFragment(long fla, boolean isAdmin) {
+    public void startProfileFragment(long fla, boolean isAdmin){
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
-        if (user.isAdmin()) {
+        if(user.isAdmin()) {
             searchView.closeSearch();
             fragmentContainer.setPadding(0, 0, 0, 0);
             expandableLayout.collapse();
@@ -209,10 +212,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
         }
-        if (user.isAdmin()) {
+        if(user.isAdmin()) {
             if (searchView.isSearchOpen()) {
                 searchView.closeSearch();
             }
@@ -239,8 +242,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void populateCards() {
-        if (fragment1.getOperatorAdapter() != null) {
+    public void populateCards(){
+        if(fragment1.getOperatorAdapter() != null) {
             try {
                 fragment1.getOperatorAdapter().setFilter(filter, statusfilter);
                 fragment1.getOperatorAdapter().getFilter().filter(lastSearchText);
@@ -257,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (user.isAdmin())
+        if(user.isAdmin())
             createSearchView(menu);
 
         TextView acct_type = findViewById(R.id.acct_type);
@@ -265,17 +268,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String loggedin = "Logged in as: " + user.getUsername();
         acct_name.setText(loggedin);
 
-        if (user.isAdmin()) {
-            acct_type.setText("ADMIN");
-            acct_type.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.button_primarypurple));
-        } else if (user.isOperator()) {
-            acct_type.setText("OPERATOR");
-            acct_type.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.button_gray));
+        if (user.isAdmin()){
+        acct_type.setText("ADMIN");
+        acct_type.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.button_primarypurple));
+        } else if (user.isOperator()){
+        acct_type.setText("OPERATOR");
+        acct_type.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.button_gray));
         }
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void createSearchView(Menu menu) {
+    public void createSearchView(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
@@ -343,30 +346,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    public void showSearchView() {
+    public void showSearchView(){
         try {
             searchContainer.setVisibility(View.VISIBLE);
             searchView.setVisibility(View.VISIBLE);
             findViewById(R.id.action_search).setVisibility(View.VISIBLE);
             populateCards();
-        } catch (Exception e) {
+        } catch(Exception e) {
             Log.d("Tester", "SearchView not yet created");
         }
     }
 
-    public void hideSearchView() {
+    public void hideSearchView(){
         try {
             searchView.closeSearch();
             searchContainer.setVisibility(View.GONE);
             searchView.setVisibility(View.GONE);
             findViewById(R.id.action_search).setVisibility(View.GONE);
-        } catch (Exception e) {
+        } catch(Exception e) {
             Log.d("Tester", "SearchView not yet created");
         }
     }
 
-    public void replaceFragment(int i) {
-        if (i == 1) {
+    public void replaceFragment(int i){
+        if(i == 1) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentContainer.setPadding(0, 0, 0, 0);
             fragmentTransaction.replace(R.id.fragment_container, fragment1, "FRAGMENT1").commit();
@@ -379,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        switch (item.getItemId()) {
+        switch(item.getItemId()){
             case R.id.nav_operatorlist:
                 fragmentContainer.setPadding(0, 0, 0, 0);
                 fragment3.setActive(false);
@@ -415,7 +418,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_logout:
                 Toast.makeText(getApplicationContext(), "Logged Out", Toast.LENGTH_LONG).show();
-                if (user.isAdmin()) {
+                if(user.isAdmin()) {
                     fragment1.setActive(false);
                     fragment3.setActive(false);
                 }

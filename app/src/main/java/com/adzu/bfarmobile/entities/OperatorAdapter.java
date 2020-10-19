@@ -54,6 +54,7 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.Operat
         holder.text_flanum.setText("FLA #: " + operator.getFla_number());
         holder.text_address.setText("Address: " + operator.getAddress());
         holder.text_opnum.setText("Operator #: " + operator.getSim1());
+        holder.text_comment.setText(operator.getComment());
         if(operator.isIsActive()){
             holder.text_status.setText("Active");
             holder.text_status.setBackgroundResource(R.color.colorActive);
@@ -136,6 +137,7 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.Operat
         TextView text_flanum;
         TextView text_address;
         TextView text_status;
+        TextView text_comment;
 
         OperatorTapListener operatorTapListener;
 
@@ -147,6 +149,7 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.Operat
             text_address = itemView.findViewById(R.id.op_address);
             text_flanum = itemView.findViewById(R.id.op_flanum);
             text_opnum = itemView.findViewById(R.id.op_simnum);
+            text_comment = itemView.findViewById(R.id.op_comment);
 
             itemView.setOnClickListener(this);
 

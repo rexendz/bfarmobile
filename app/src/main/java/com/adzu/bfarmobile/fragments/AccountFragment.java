@@ -146,13 +146,12 @@ public class AccountFragment extends Fragment implements RadioGroup.OnCheckedCha
     4 - Activate Account
      */
     private void modifyAccount(DatabaseReference ref, final int i, final String user) {
-        DatabaseUtil dbUtil = new DatabaseUtil();
         if(user.equals("elmer"))
             Toast.makeText(getContext(), "Cannot Modify Root User", Toast.LENGTH_LONG).show();
         else {
             final Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_container);
             final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            dbUtil.readDataByUsername(user, ref, new OnGetDataListener() {
+            DatabaseUtil.readDataByUsername(user, ref, new OnGetDataListener() {
                 @Override
                 public void dataRetrieved(final DataSnapshot dataSnapshot) {
                     switch (i) {

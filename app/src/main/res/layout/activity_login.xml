@@ -115,11 +115,11 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="60dp"
             android:fontFamily="@font/product_sans_bold"
-            android:text="BFAR MOBILE"
+            android:text="MOBILE AQUAFARM"
             android:textColor="@color/colorPrimaryBlue"
-            android:textSize="40sp"
+            android:textSize="28sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.233"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
@@ -135,7 +135,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.635" />
+            app:layout_constraintVertical_bias="0.605" />
 
         <TextView
             android:id="@+id/text_connection"

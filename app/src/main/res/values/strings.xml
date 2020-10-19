@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BFAR Mobile</string>
+    <string name="app_name">Mobile Aquafarm</string>
     <string name="activation_notice">Note: An Administrator must activate your account first before you can use it.</string>
     <string name="title_activity_main">ScrollingActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
