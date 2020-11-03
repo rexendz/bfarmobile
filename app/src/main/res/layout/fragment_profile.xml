@@ -28,7 +28,7 @@
             android:layout_height="64dp"
             android:gravity="center"
             android:textSize="32dp"
-            android:background="#673AB7"
+            android:background="@color/colorPrimaryBlue"
             android:textColor="#FFFFFF"
             android:text="Operator Details" />
 
@@ -36,7 +36,7 @@
             android:id="@+id/opdetails_short"
             android:layout_width="match_parent"
             android:layout_height="109dp"
-            android:background="#D1C4E9">
+            android:background="#73e8ff">
 
             <TextView
                 android:id="@+id/profile_opstatus"
@@ -145,7 +145,7 @@
            <androidx.constraintlayout.widget.ConstraintLayout
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:background="#D1C4E9">
+               android:background="#73e8ff">
 
                <TextView
                    android:id="@+id/textView37"
@@ -346,7 +346,7 @@
             android:id="@+id/fishpond_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFA000"
+            android:background="@color/colorPrimaryBlue"
             android:fontFamily="@font/product_sans"
             android:gravity="center"
             android:text="Fishpond Data"
@@ -357,7 +357,7 @@
             android:id="@+id/table_container"
             android:layout_width="match_parent"
             android:layout_height="84px"
-            android:background="#FFECB3">
+            android:background="#b6ffff">
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -371,7 +371,7 @@
                     android:id="@+id/latest_head"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="#FFC107">
+                    android:background="#4ba3c7">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -503,7 +503,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#388E3C">
+            android:background="@color/colorPrimaryBlue">
 
             <ImageView
                 android:visibility="invisible"
