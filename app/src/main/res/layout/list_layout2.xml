@@ -132,7 +132,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="12dp"
                 android:layout_marginRight="12dp"
-                android:background="@drawable/button_primaryblue"
+                android:background="@color/colorAdmin"
                 android:fontFamily="@font/product_sans"
                 android:text="Remove as Admin"
                 android:textColor="#FFFFFF"
