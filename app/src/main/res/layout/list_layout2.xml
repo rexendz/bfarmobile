@@ -14,7 +14,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:layout_height="190dp"
             android:padding="8dp">
 
             <TextView
@@ -104,11 +104,27 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:textColor="#000000" />
 
+                <TextView
+                    android:id="@+id/account_fla"
+                    android:layout_below="@+id/acc_username"
+                    android:layout_width="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/product_sans"
+                    android:text="FLA #: "
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="13dp"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#000000" />
+
+
             <Button
                 android:id="@+id/button_left"
                 android:layout_width="150dp"
                 android:layout_height="40dp"
-                android:layout_below="@+id/acc_username"
+                android:layout_below="@+id/account_fla"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginStart="12dp"
@@ -126,13 +142,13 @@
                 android:id="@+id/button_right"
                 android:layout_width="150dp"
                 android:layout_height="40dp"
-                android:layout_below="@+id/acc_username"
+                android:layout_below="@+id/account_fla"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="12dp"
                 android:layout_marginRight="12dp"
-                android:background="@color/colorAdmin"
+                android:background="@drawable/button_admin"
                 android:fontFamily="@font/product_sans"
                 android:text="Remove as Admin"
                 android:textColor="#FFFFFF"
@@ -256,32 +272,6 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/product_sans"
                     android:text="elmer"
-                    android:textColor="#000000"
-                    android:layout_marginLeft="4dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/fla_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="12dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/product_sans"
-                    android:text="FLA #: "
-                    android:textColor="#000000"
-                    android:layout_marginLeft="12dp" />
-                <TextView
-                    android:id="@+id/account_fla"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/product_sans"
-                    android:text="123"
                     android:textColor="#000000"
                     android:layout_marginLeft="4dp" />
 

@@ -62,24 +62,38 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
         holder.account_deactivated_by.setText(account.getDeactivated_by());
         holder.account_madeadmin_by.setText(account.getMade_admin_by());
         holder.account_removedadmin_by.setText(account.getRemoved_admin_by());
-        holder.account_fla.setText(String.valueOf(account.getFla_number()));
+        holder.account_fla.setText("FLA #: " + account.getFla_number());
         holder.account_sim1.setText(account.getSim1());
         holder.account_sim2.setText(account.getSim2());
 
         if(account.getActivated_by().equals("NONE"))
             holder.l1.setVisibility(View.GONE);
+        else
+            holder.l1.setVisibility(View.VISIBLE);
         if(account.getDeactivated_by().equals("NONE"))
             holder.l2.setVisibility(View.GONE);
+        else
+            holder.l2.setVisibility(View.VISIBLE);
         if(account.getMade_admin_by().equals("NONE"))
             holder.l3.setVisibility(View.GONE);
+        else
+            holder.l3.setVisibility(View.VISIBLE);
         if(account.getRemoved_admin_by().equals("NONE"))
             holder.l4.setVisibility(View.GONE);
-        if(account.getFla_number() == -25565)
-            holder.l5.setVisibility(View.GONE);
+        else
+            holder.l4.setVisibility(View.VISIBLE);
+        if(account.getFla_number() < 0)
+            holder.account_fla.setVisibility(View.GONE);
+        else
+            holder.account_fla.setVisibility(View.VISIBLE);
         if(account.getSim1().equals("NONE"))
             holder.l6.setVisibility(View.GONE);
+        else
+            holder.l6.setVisibility(View.VISIBLE);
         if(account.getSim2().equals("NONE"))
             holder.l7.setVisibility(View.GONE);
+        else
+            holder.l7.setVisibility(View.VISIBLE);
 
         if(account.isActivated()){
             holder.text_status1.setText("APPROVED");
@@ -178,7 +192,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
         TextView account_activated_by, account_madeadmin_by, account_removedadmin_by, account_deactivated_by, account_fla, account_sim1, account_sim2;
         ExpandableLayout expandableLayout;
 
-        LinearLayout l1, l2, l3, l4, l5, l6, l7;
+        LinearLayout l1, l2, l3, l4, l6, l7;
 
         public AccountViewHolder(@NonNull View itemView, AccountListClickListener clickListener) {
             super(itemView);
@@ -204,7 +218,6 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
             l2 = itemView.findViewById(R.id.deactivated_container);
             l3 = itemView.findViewById(R.id.madeadmin_container);
             l4 = itemView.findViewById(R.id.removedadmin_container);
-            l5 = itemView.findViewById(R.id.fla_container);
             l6 = itemView.findViewById(R.id.sim1_container);
             l7 = itemView.findViewById(R.id.sim2_container);
 
