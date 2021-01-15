@@ -70,13 +70,13 @@
 
             <TextView
                 android:id="@+id/acc_status3"
-                android:layout_width="76dp"
+                android:layout_width="84dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="64dp"
+                android:layout_marginStart="48dp"
                 android:layout_marginLeft="48dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="64dp"
+                android:layout_marginEnd="48dp"
                 android:layout_toStartOf="@+id/acc_status"
                 android:layout_toLeftOf="@+id/acc_status"
                 android:layout_toEndOf="@+id/acc_status2"

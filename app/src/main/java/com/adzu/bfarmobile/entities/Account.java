@@ -13,6 +13,8 @@ public class Account{
     private boolean activated;
     private boolean admin;
     private boolean operator;
+
+    private int boxes;
     private long fla_number;
     private String sim1;
     private String sim2;
@@ -47,12 +49,21 @@ public class Account{
         this.activated = (boolean) data.get("activated");
         this.admin = (boolean) data.get("admin");
         this.operator = (boolean) data.get("operator");
+        this.boxes = (int) data.get("boxes");
         this.sim1 = (String) data.get("sim1");
         this.sim2 = (String) data.get("sim2");
     }
 
     public boolean isOperator() {
         return operator;
+    }
+
+    public int getBoxes() {
+        return boxes;
+    }
+
+    public void setBoxes(int boxes) {
+        this.boxes = boxes;
     }
 
     public boolean isActivated() {

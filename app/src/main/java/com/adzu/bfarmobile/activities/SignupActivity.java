@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -31,13 +32,18 @@ import net.rimoto.intlphoneinput.IntlPhoneInput;
 
 
 public class SignupActivity extends AppCompatActivity {
+    private final int MAX_BOX_COUNT = 100;
+    private final int MIN_BOX_COUNT = 1;
+
     private ConstraintLayout signupLayout;
     private AnimationDrawable animDrawable;
     private DatabaseReference databaseReference;
     private Switch switch1;
     private boolean operator;
-    private EditText fla;
+    private EditText fla, box;
+    private ImageButton buttonAdd, buttonSub;
     private IntlPhoneInput sim1, sim2;
+    private int boxCount = MIN_BOX_COUNT;
 
     private ProgressDialog mProgress;
 
@@ -47,12 +53,17 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         operator = false;
         fla = findViewById(R.id.field_fla);
+        box = findViewById(R.id.field_box);
+        buttonAdd = findViewById(R.id.button_add);
+        buttonSub = findViewById(R.id.button_sub);
         sim1 = findViewById(R.id.field_sim1);
         sim2 = findViewById(R.id.field_sim2);
         sim1.setEmptyDefault("PH");
         sim2.setEmptyDefault("PH");
         sim1.setEnabled(false);
         sim2.setEnabled(false);
+
+        box.setText(Integer.toString(MIN_BOX_COUNT));
 
         databaseReference = FirebaseDatabase.getInstance().getReference("account");
 
@@ -61,6 +72,24 @@ public class SignupActivity extends AppCompatActivity {
         animDrawable.setEnterFadeDuration(10);
         animDrawable.setExitFadeDuration(5000);
         animDrawable.start();
+
+        box.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b) {
+                    if(Integer.parseInt(box.getText().toString()) > 100) {
+                        boxCount = 100;
+                        box.setText("100");
+                    } else if(Integer.parseInt(box.getText().toString()) < 1) {
+                        boxCount = 1;
+                        box.setText("1");
+                    } else {
+                        boxCount = Integer.parseInt(box.getText().toString());
+                    }
+
+                }
+            }
+        });
 
         switch1 = findViewById(R.id.switch1);
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -71,11 +100,36 @@ public class SignupActivity extends AppCompatActivity {
                 fla.setEnabled(b);
                 sim1.setEnabled(b);
                 sim2.setEnabled(b);
+                box.setEnabled(b);
+                buttonAdd.setClickable(b);
+                buttonSub.setClickable(b);
 
                 if (!b) {
                     fla.setText(null);
                     ((EditText) ((LinearLayout) sim1.getChildAt(0)).getChildAt(1)).setText("");
                     ((EditText) ((LinearLayout) sim2.getChildAt(0)).getChildAt(1)).setText("");
+                }
+            }
+        });
+
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(operator) {
+                    if (boxCount < MAX_BOX_COUNT)
+                        boxCount++;
+                    box.setText(Integer.toString(boxCount));
+                }
+            }
+        });
+
+        buttonSub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(operator) {
+                    if (boxCount > MIN_BOX_COUNT)
+                        boxCount--;
+                    box.setText(Integer.toString(boxCount));
                 }
             }
         });
@@ -104,6 +158,10 @@ public class SignupActivity extends AppCompatActivity {
         user.setLastname(field_lastname.getText().toString());
         user.setUsername(field_user.getText().toString());
         user.setPassword(field_pass.getText().toString());
+        if(operator)
+            user.setBoxes(boxCount);
+        else
+            user.setBoxes(0);
         user.setOperator(operator);
         boolean operatorValid = false;
 
