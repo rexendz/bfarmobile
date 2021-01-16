@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.adzu.bfarmobile.R;
 import com.adzu.bfarmobile.entities.Account;
 import com.adzu.bfarmobile.entities.DatabaseUtil;
+import com.adzu.bfarmobile.entities.FishpondBoxes;
 import com.adzu.bfarmobile.entities.OnGetDataListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -110,7 +111,6 @@ public class LoginActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         button_login = findViewById(R.id.button_login);
         button_signup = findViewById(R.id.button_signup);
-
     }
 
     private boolean isNetworkAvailable() {

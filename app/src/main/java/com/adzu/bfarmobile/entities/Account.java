@@ -49,7 +49,12 @@ public class Account{
         this.activated = (boolean) data.get("activated");
         this.admin = (boolean) data.get("admin");
         this.operator = (boolean) data.get("operator");
-        this.boxes = (int) data.get("boxes");
+        try {
+            this.boxes = (int) data.get("boxes");
+        } catch (NullPointerException e) {
+            this.boxes = 0;
+            e.printStackTrace();
+        }
         this.sim1 = (String) data.get("sim1");
         this.sim2 = (String) data.get("sim2");
     }
