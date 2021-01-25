@@ -59,7 +59,7 @@ public class ListFragment extends Fragment implements OperatorAdapter.OperatorTa
     private int count;
 
     public interface OperatorListListener{
-        public void onGetList();
+        void onGetList();
     }
 
     public ListFragment() {

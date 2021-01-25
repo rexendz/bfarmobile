@@ -68,7 +68,7 @@ import java.util.TimerTask;
 import static android.content.ContentValues.TAG;
 import static com.adzu.bfarmobile.entities.RecordData.checkTemp;
 
-public class ProfileFragment extends Fragment implements View.OnClickListener {
+public class ProfileFragment extends Fragment implements View.OnClickListener, ProfileAdapter.ProfileTapListener {
     private View view;
     private long fla_num;
     private boolean isAdmin;
@@ -87,6 +87,34 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private ProfileAdapter profileAdapter;
     private RecyclerView recyclerView, recyclerView2;
     private Button delete_op, comment_op;
+
+    @Override
+    public void onItemTap(int position, long timestamp, float temp, float ph, float sal, float DO) {
+        ((TextView) view.findViewById(R.id.data_analysis)).setText("Data Analysis on\n" + TimestampToDate.getDate(timestamp));
+
+        short a = RecordData.checkTemp(temp);
+        short b = RecordData.checkPh(ph);
+        short c = RecordData.checkSalinity(sal);
+        short d = RecordData.checkDo(DO);
+        dataList.clear();
+        if(a != -1)
+            dataList.add(new DataAnalysis(a));
+        if(b != -1)
+            dataList.add(new DataAnalysis(b));
+        if(c != -1)
+            dataList.add(new DataAnalysis(c));
+        if(d != -1)
+            dataList.add(new DataAnalysis(d));
+
+        if(dataList.isEmpty())
+            ((ImageView) view.findViewById(R.id.data_error)).setVisibility(View.GONE);
+        else
+            ((ImageView) view.findViewById(R.id.data_error)).setVisibility(View.VISIBLE);
+
+        AnalysisAdapter analysisAdapter = new AnalysisAdapter(view.getContext(), dataList);
+        recyclerView2.removeAllViews();
+        recyclerView2.setAdapter(analysisAdapter);
+    }
 
     public interface ProfileListListener{
         void onGetList(int count);
@@ -276,12 +304,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 if(count == 0) {
                     ((TextView) view.findViewById(R.id.latest_date)).setText(TimestampToDate.getDate(latestRecord.getTimestamp()));
                     ((TextView) view.findViewById(R.id.latest_ph)).setText(String.valueOf(latestRecord.getPh_level()));
-                    ((TextView) view.findViewById(R.id.latest_dolevel)).setText(String.valueOf(latestRecord.getDo_level()));
-                    ((TextView) view.findViewById(R.id.latest_temperature)).setText(String.valueOf(latestRecord.getTemperature()));
+                    ((TextView) view.findViewById(R.id.latest_dolevel)).setText(String.format("%.2f", latestRecord.getDo_level()));
+                    ((TextView) view.findViewById(R.id.latest_temperature)).setText(String.format("%.2f", latestRecord.getTemperatureCelsius()));
                     ((TextView) view.findViewById(R.id.latest_salinity)).setText(String.valueOf(latestRecord.getSalinity()));
                     ((TextView) view.findViewById(R.id.norecord)).setVisibility(View.GONE);
 
-                    profileAdapter = new ProfileAdapter(view.getContext(), recordList);
+                    profileAdapter = new ProfileAdapter(view.getContext(), recordList, ProfileFragment.this);
 
                     recyclerView.setHasFixedSize(true);
                     recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -320,15 +348,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         operatorListListener = new OperatorListListener() {
             @Override
             public void onGetList(int count) {
-                if(count == 0) {
-                    Timer timer = new Timer();
-                    timer.scheduleAtFixedRate(new TimerTask() {
-                        @Override
-                        public void run() {
-                            getTableData();
-                        }
-                    }, 0, 5000);
-                }
+                getTableData();
             }
         };
 
@@ -363,6 +383,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     }
                     latestRecord = recordList.get(0);
                     ((TextView) view.findViewById(R.id.fishpond_data)).setText("Fishpond Data from " + operator.getSim2());
+                    ((TextView) view.findViewById(R.id.data_analysis)).setText("Data Analysis on\n" + TimestampToDate.getDate(latestRecord.getTimestamp()));
                     profileListListener.onGetList(count1++);
                 }
                 else {

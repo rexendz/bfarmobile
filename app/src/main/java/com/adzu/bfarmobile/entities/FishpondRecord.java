@@ -82,6 +82,8 @@ public class FishpondRecord implements Parcelable {
         return temperature;
     }
 
+    public float getTemperatureCelsius() { return (temperature - 273.15f);}
+
     public void setTemperature(float temperature) {
         this.temperature = temperature;
     }
