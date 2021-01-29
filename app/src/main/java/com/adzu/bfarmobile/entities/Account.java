@@ -14,7 +14,7 @@ public class Account{
     private boolean admin;
     private boolean operator;
 
-    private int boxes;
+    private long boxes;
     private long fla_number;
     private String sim1;
     private String sim2;
@@ -50,7 +50,7 @@ public class Account{
         this.admin = (boolean) data.get("admin");
         this.operator = (boolean) data.get("operator");
         try {
-            this.boxes = (int) data.get("boxes");
+            this.boxes = (long) data.get("boxes");
         } catch (NullPointerException e) {
             this.boxes = 0;
             e.printStackTrace();
@@ -63,7 +63,7 @@ public class Account{
         return operator;
     }
 
-    public int getBoxes() {
+    public long getBoxes() {
         return boxes;
     }
 
