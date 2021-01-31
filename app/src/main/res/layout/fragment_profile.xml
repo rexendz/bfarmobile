@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
         <TextView
             android:id="@+id/textView14"
             android:layout_width="match_parent"
@@ -20,7 +21,7 @@
             android:gravity="center"
             android:text="Tap to show more info"
             android:textColor="#FFFFFF"
-            android:textSize="12dp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/operatordetails"
@@ -204,7 +205,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/product_sans"
-                    android:text="+639064018303"
                     android:textColor="#212121"
                     app:layout_constraintStart_toEndOf="@+id/textView34"
                     app:layout_constraintTop_toTopOf="@+id/textView34" />
@@ -229,11 +229,166 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/product_sans"
-                    android:text="Operator Sim 2 (Fishpond): "
+                    android:text="Fishpond Box Sims: "
                     android:textColor="#212121"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textView33" />
+
+                <LinearLayout
+                    android:id="@+id/layout_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:background="#0277bd"
+                    app:layout_constraintStart_toEndOf="@id/textView34"
+                    app:layout_constraintTop_toTopOf="@id/textView34">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/product_sans"
+                        android:text="Tap to View Numbers"
+                        android:textColor="#FFFFFF" />
+                </LinearLayout>
+
+                <net.cachapa.expandablelayout.ExpandableLayout
+                    android:id="@+id/profile_expand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="#0277bd"
+                    app:el_expanded="false"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/layout_profile">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/profile_box1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/product_sans"
+                            android:text="Box 1 Sim: "
+                            android:textColor="#FFFFFF"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/profile_box2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/product_sans"
+                            android:text="Box 2 Sim: "
+                            android:textColor="#FFFFFF"
+                            app:layout_constraintTop_toBottomOf="@id/profile_box1"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/profile_box3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/product_sans"
+                            android:text="Box 3 Sim: "
+                            android:textColor="#FFFFFF"
+                            app:layout_constraintTop_toBottomOf="@id/profile_box2"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/profile_box4"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/product_sans"
+                            android:text="Box 4 Sim: "
+                            android:textColor="#FFFFFF"
+                            app:layout_constraintTop_toBottomOf="@id/profile_box3"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/profile_box5"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/product_sans"
+                            android:text="Box 5 Sim: "
+                            android:textColor="#FFFFFF"
+                            app:layout_constraintTop_toBottomOf="@id/profile_box4"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/profile_box6"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/product_sans"
+                            android:text="Box 6 Sim: "
+                            app:layout_constraintTop_toBottomOf="@id/profile_box5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:textColor="#FFFFFF"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/profile_box7"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/product_sans"
+                            android:text="Box 7 Sim: "
+                            android:textColor="#FFFFFF"
+                            app:layout_constraintTop_toBottomOf="@id/profile_box6"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/profile_box8"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/product_sans"
+                            android:text="Box 8 Sim: "
+                            app:layout_constraintTop_toBottomOf="@id/profile_box7"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:textColor="#FFFFFF"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/profile_box9"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/product_sans"
+                            android:text="Box 9 Sim: "
+                            android:textColor="#FFFFFF"
+                            app:layout_constraintTop_toBottomOf="@id/profile_box8"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/profile_box10"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/product_sans"
+                            android:text="Box 10 Sim: "
+                            app:layout_constraintTop_toBottomOf="@id/profile_box9"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:textColor="#FFFFFF"
+                            android:visibility="gone" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </net.cachapa.expandablelayout.ExpandableLayout>
 
                 <TextView
                     android:id="@+id/textView35"
@@ -247,7 +402,7 @@
                     android:textColor="#212121"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textView34" />
+                    app:layout_constraintTop_toBottomOf="@id/profile_expand" />
 
                 <TextView
                     android:id="@+id/textView36"
@@ -324,7 +479,7 @@
                     android:background="@drawable/button_primaryred"
                     android:text="Delete Operator"
                     android:textColor="#FFFFFF"
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/button_commentop" />
@@ -344,6 +499,27 @@
                     app:layout_constraintGuide_begin="20dp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </net.cachapa.expandablelayout.ExpandableLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryBlue"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/product_sans"
+                android:text="Show Fishpond Data From: "
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+
+            <Spinner
+                android:id="@+id/spinner_profile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/fishpond_data"

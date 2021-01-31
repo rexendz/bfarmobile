@@ -64,7 +64,6 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
         holder.account_removedadmin_by.setText(account.getRemoved_admin_by());
         holder.account_fla.setText("FLA #: " + account.getFla_number());
         holder.account_sim1.setText(account.getSim1());
-        holder.account_sim2.setText(account.getSim2());
 
         if(account.getActivated_by().equals("NONE"))
             holder.l1.setVisibility(View.GONE);
@@ -90,10 +89,6 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
             holder.l6.setVisibility(View.GONE);
         else
             holder.l6.setVisibility(View.VISIBLE);
-        if(account.getSim2().equals("NONE"))
-            holder.l7.setVisibility(View.GONE);
-        else
-            holder.l7.setVisibility(View.VISIBLE);
 
         if(account.isActivated()){
             holder.text_status1.setText("APPROVED");
@@ -189,7 +184,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
         Button button_right; // Admin | Activate
         AccountListClickListener clickListener;
 
-        TextView account_activated_by, account_madeadmin_by, account_removedadmin_by, account_deactivated_by, account_fla, account_sim1, account_sim2;
+        TextView account_activated_by, account_madeadmin_by, account_removedadmin_by, account_deactivated_by, account_fla, account_sim1;
         ExpandableLayout expandableLayout;
 
         LinearLayout l1, l2, l3, l4, l6, l7;
@@ -212,14 +207,12 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
             account_removedadmin_by = itemView.findViewById(R.id.account_removedadmin_by);
             account_fla = itemView.findViewById(R.id.account_fla);
             account_sim1 = itemView.findViewById(R.id.account_sim1);
-            account_sim2 = itemView.findViewById(R.id.account_sim2);
 
             l1 = itemView.findViewById(R.id.activated_container);
             l2 = itemView.findViewById(R.id.deactivated_container);
             l3 = itemView.findViewById(R.id.madeadmin_container);
             l4 = itemView.findViewById(R.id.removedadmin_container);
             l6 = itemView.findViewById(R.id.sim1_container);
-            l7 = itemView.findViewById(R.id.sim2_container);
 
             expandableLayout = itemView.findViewById(R.id.expandable_layout1);
             itemView.setOnClickListener(new View.OnClickListener() {

@@ -192,7 +192,6 @@ public class LoginActivity extends AppCompatActivity {
                             extras.putString("account_lastname", account.getLastname());
                             extras.putBoolean("account_operator", account.isOperator());
                             extras.putString("account_sim1", account.getSim1());
-                            extras.putString("account_sim2", account.getSim2());
                             extras.putBoolean("account_admin", account.isAdmin());
                             newIntent.putExtras(extras);
                             startActivity(newIntent);

@@ -1,0 +1,111 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.adzu.bfarmobile.fragments.AccountFragment">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:background="#0288D1"
+        android:layout_height="64dp" >
+
+        <TextView
+            android:id="@+id/textView13"
+            android:fontFamily="@font/product_sans"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="4dp"
+            android:text="Account Filters"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:background="#0288D1"
+        app:layout_constraintTop_toBottomOf="@+id/ll1"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <RadioGroup
+            android:id="@+id/fg_acc1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:checkedButton="@id/acc_fil_all">
+            <RadioButton
+                android:id="@+id/acc_fil_all"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="All"
+                android:fontFamily="@font/product_sans"
+                android:textSize="12sp"
+                android:textColor="#FFFFFF" />
+            <RadioButton
+                android:id="@+id/acc_fil_app"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="Approved"
+                android:fontFamily="@font/product_sans"
+                android:textSize="12sp"
+                android:textColor="#FFFFFF" />
+            <RadioButton
+                android:id="@+id/acc_fil_pen"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="Pending"
+                android:fontFamily="@font/product_sans"
+                android:textSize="12sp"
+                android:textColor="#FFFFFF" />
+        </RadioGroup>
+    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll1"
+            android:layout_width="240dp"
+            android:layout_height="32dp"
+            android:background="#0288D1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioGroup
+                android:id="@+id/fg_acc2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/acc_fil_adm"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/product_sans"
+                    android:text="Admin"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp" />
+
+                <RadioButton
+                    android:id="@+id/acc_fil_ope"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/product_sans"
+                    android:text="Operator"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp" />
+
+            </RadioGroup>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="64dp"
+        android:id="@+id/recyclerView2" />
+
+</FrameLayout>

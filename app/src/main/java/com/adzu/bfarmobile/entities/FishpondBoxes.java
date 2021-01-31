@@ -16,6 +16,49 @@ public class FishpondBoxes {
     private String box9_sim;
     private String box10_sim;
 
+    public FishpondBoxes() {
+
+    }
+
+    public FishpondBoxes(Map<String, Object> data){
+        this.box1_sim = (String) data.get("box1_sim");
+        this.box2_sim = (String) data.get("box2_sim");
+        this.box3_sim = (String) data.get("box3_sim");
+        this.box4_sim = (String) data.get("box4_sim");
+        this.box5_sim = (String) data.get("box5_sim");
+        this.box6_sim = (String) data.get("box6_sim");
+        this.box7_sim = (String) data.get("box7_sim");
+        this.box8_sim = (String) data.get("box8_sim");
+        this.box9_sim = (String) data.get("box9_sim");
+        this.box10_sim = (String) data.get("box10_sim");
+    }
+
+    public String getBox(int i) {
+        switch(i) {
+            case 0:
+                return this.box1_sim;
+            case 1:
+                return this.box2_sim;
+            case 2:
+                return this.box3_sim;
+            case 3:
+                return this.box4_sim;
+            case 4:
+                return this.box5_sim;
+            case 5:
+                return this.box6_sim;
+            case 6:
+                return this.box7_sim;
+            case 7:
+                return this.box8_sim;
+            case 8:
+                return this.box9_sim;
+            case 9:
+                return this.box10_sim;
+        }
+        return null;
+    }
+
     public String getBox1_sim() {
         return box1_sim;
     }

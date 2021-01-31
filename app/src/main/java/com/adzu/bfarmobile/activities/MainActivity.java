@@ -114,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         user.setLastname(intent.getStringExtra("account_lastname"));
         user.setOperator(intent.getBooleanExtra("account_operator", true));
         user.setSim1(intent.getStringExtra("account_sim1"));
-        user.setSim2(intent.getStringExtra("account_sim2"));
 
 
 

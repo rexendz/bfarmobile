@@ -33,7 +33,7 @@ dependencies {
     implementation group: 'at.favre.lib', name: 'bcrypt', version: '0.9.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.annotation:annotation:1.1.0'
-    implementation 'com.google.firebase:firebase-database:19.3.1'
+    implementation 'com.google.firebase:firebase-database:19.6.0'
     implementation 'net.rimoto:intlphoneinput:1.0.1'
     implementation 'com.google.android.material:material:1.1.0'
     implementation "androidx.drawerlayout:drawerlayout:1.1.0"

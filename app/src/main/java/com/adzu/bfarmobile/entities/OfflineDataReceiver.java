@@ -11,7 +11,7 @@ import android.telephony.SmsMessage;
 public class OfflineDataReceiver extends BroadcastReceiver {
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     private static final String TAG = "SmsBroadcastReceiver";
-    private static final String BFAR_NUMBER = "+639361529943";
+    private static final String BFAR_NUMBER = "+639363728384";
     String msg, phoneNo = "";
 
     @Override

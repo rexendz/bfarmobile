@@ -24,11 +24,14 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -41,6 +44,7 @@ import com.adzu.bfarmobile.entities.Account;
 import com.adzu.bfarmobile.entities.AnalysisAdapter;
 import com.adzu.bfarmobile.entities.DataAnalysis;
 import com.adzu.bfarmobile.entities.DatabaseUtil;
+import com.adzu.bfarmobile.entities.FishpondBoxes;
 import com.adzu.bfarmobile.entities.FishpondOperator;
 import com.adzu.bfarmobile.entities.FishpondRecord;
 import com.adzu.bfarmobile.entities.OnGetDataListener;
@@ -73,20 +77,24 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, P
     private long fla_num;
     private boolean isAdmin;
     private FishpondOperator operator;
-    private TextView opname, opfla, opsim1, opsim2, opaddress, opsize, opissuance, opexpiry, opdetails, opstatus, dataAnalysis, opcomment;
+    private TextView opname, opfla, opsim1, opaddress, opsize, opissuance, opexpiry, opdetails, opstatus, dataAnalysis, opcomment;
+    private TextView box1, box2, box3, box4, box5, box6, box7, box8, box9, box10;
     private ConstraintLayout opdetails_short;
-    private ExpandableLayout expandableLayout, expandableLayout2, expandableLayout3;
+    private ExpandableLayout expandableLayout, expandableLayout2, expandableLayout3, expandableLayoutSim;
     private List<FishpondRecord> recordList;
     private List<DataAnalysis> dataList;
+    private List<String> numberList;
     private FishpondRecord latestRecord;
     private TableRow table;
     private int count, count1;
-    private LinearLayout layoutss;
+    private LinearLayout layoutss, layoutSim;
     private ProfileListListener profileListListener;
     private OperatorListListener operatorListListener;
     private ProfileAdapter profileAdapter;
     private RecyclerView recyclerView, recyclerView2;
     private Button delete_op, comment_op;
+    private Spinner spinner;
+    private FishpondBoxes boxes;
 
     @Override
     public void onItemTap(int position, long timestamp, float temp, float ph, float sal, float DO) {
@@ -97,16 +105,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, P
         short c = RecordData.checkSalinity(sal);
         short d = RecordData.checkDo(DO);
         dataList.clear();
-        if(a != -1)
+        if (a != -1)
             dataList.add(new DataAnalysis(a));
-        if(b != -1)
+        if (b != -1)
             dataList.add(new DataAnalysis(b));
-        if(c != -1)
+        if (c != -1)
             dataList.add(new DataAnalysis(c));
-        if(d != -1)
+        if (d != -1)
             dataList.add(new DataAnalysis(d));
 
-        if(dataList.isEmpty())
+        if (dataList.isEmpty())
             ((ImageView) view.findViewById(R.id.data_error)).setVisibility(View.GONE);
         else
             ((ImageView) view.findViewById(R.id.data_error)).setVisibility(View.VISIBLE);
@@ -116,11 +124,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, P
         recyclerView2.setAdapter(analysisAdapter);
     }
 
-    public interface ProfileListListener{
+    public interface ProfileListListener {
         void onGetList(int count);
     }
 
-    public interface OperatorListListener{
+    public interface OperatorListListener {
         void onGetList(int count);
     }
 
@@ -144,9 +152,48 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, P
         dataAnalysis = view.findViewById(R.id.data_analysis);
         delete_op = view.findViewById(R.id.button_deleteop);
         comment_op = view.findViewById(R.id.button_commentop);
+        spinner = view.findViewById(R.id.spinner_profile);
+        layoutSim = view.findViewById(R.id.layout_profile);
+        expandableLayoutSim = view.findViewById(R.id.profile_expand);
+
+        box1 = view.findViewById(R.id.profile_box1);
+        box2 = view.findViewById(R.id.profile_box2);
+        box3 = view.findViewById(R.id.profile_box3);
+        box4 = view.findViewById(R.id.profile_box4);
+        box5 = view.findViewById(R.id.profile_box5);
+        box6 = view.findViewById(R.id.profile_box6);
+        box7 = view.findViewById(R.id.profile_box7);
+        box8 = view.findViewById(R.id.profile_box8);
+        box9 = view.findViewById(R.id.profile_box9);
+        box10 = view.findViewById(R.id.profile_box10);
+
+        layoutSim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!expandableLayoutSim.isExpanded()) {
+                    expandableLayoutSim.expand();
+                } else {
+                    expandableLayoutSim.collapse();
+                }
+            }
+        });
+
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                getTableData();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         recordList = new ArrayList<>();
         dataList = new ArrayList<>();
+        numberList = new ArrayList<>();
 
         expandableLayout = view.findViewById(R.id.expandable_layout2);
         expandableLayout2 = view.findViewById(R.id.expandable_layout3);
@@ -158,7 +205,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, P
         fishpond_data.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(recordList.size() > 1) {
+                if (recordList.size() > 1) {
                     if (!expandableLayout2.isExpanded()) {
                         if (!recordList.isEmpty()) {
                             table.setVisibility(View.INVISIBLE);
@@ -179,13 +226,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, P
         dataAnalysis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!expandableLayout3.isExpanded())
+                if (!expandableLayout3.isExpanded())
                     expandableLayout3.expand();
                 else
                     expandableLayout3.collapse();
             }
         });
-
 
 
         recyclerView = view.findViewById(R.id.recyclerView3);
@@ -200,7 +246,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, P
         opfla = view.findViewById(R.id.profile_opfla);
         opaddress = view.findViewById(R.id.profile_address);
         opsim1 = view.findViewById(R.id.profile_opsim1);
-        opsim2 = view.findViewById(R.id.profile_opsim2);
         opissuance = view.findViewById(R.id.profile_opissuance);
         opexpiry = view.findViewById(R.id.profile_opexpiry);
         opsize = view.findViewById(R.id.profile_opsize);
@@ -210,26 +255,24 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, P
         DatabaseUtil.readDataByFLA(fla_num, ref, new OnGetDataListener() {
             @Override
             public void dataRetrieved(final DataSnapshot dataSnapshot) {
-                operator = new FishpondOperator((Map<String, Object>)dataSnapshot.getValue());
+                operator = new FishpondOperator((Map<String, Object>) dataSnapshot.getValue());
                 opfla.setText(String.valueOf(operator.getFla_number()));
                 opname.setText(operator.getFullName());
                 opaddress.setText(operator.getAddress());
                 opsim1.setText(operator.getSim1());
-                opsim2.setText(operator.getSim2());
                 opissuance.setText(operator.getIssuance_date());
                 opexpiry.setText(operator.getExpiration_date());
                 opsize.setText(operator.getFishpond_size());
                 opcomment.setText(operator.getComment());
-                if(operator.isIsActive()){
+                if (operator.isIsActive()) {
                     opstatus.setText("Active");
                     opstatus.setBackgroundResource(R.color.colorActive);
-                }
-                else{
+                } else {
                     opstatus.setText("Expired");
                     opstatus.setBackgroundResource(R.color.colorExpired);
                 }
 
-                if(isAdmin){
+                if (isAdmin) {
                     final Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                     final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     delete_op.setVisibility(View.VISIBLE);
@@ -240,11 +283,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, P
                             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    switch (which){
+                                    switch (which) {
                                         case DialogInterface.BUTTON_POSITIVE:
                                             Toast.makeText(getContext(), "Operator Deleted", Toast.LENGTH_LONG).show();
                                             dataSnapshot.getRef().removeValue();
-                                            ((MainActivity)getActivity()).replaceFragment(1);
+                                            ((MainActivity) getActivity()).replaceFragment(1);
                                             break;
 
                                         case DialogInterface.BUTTON_NEGATIVE:
@@ -301,72 +344,233 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, P
         profileListListener = new ProfileListListener() {
             @Override
             public void onGetList(int count) {
-                if(count == 0) {
-                    ((TextView) view.findViewById(R.id.latest_date)).setText(TimestampToDate.getDate(latestRecord.getTimestamp()));
-                    ((TextView) view.findViewById(R.id.latest_ph)).setText(String.valueOf(latestRecord.getPh_level()));
-                    ((TextView) view.findViewById(R.id.latest_dolevel)).setText(String.format("%.2f", latestRecord.getDo_level()));
-                    ((TextView) view.findViewById(R.id.latest_temperature)).setText(String.format("%.2f", latestRecord.getTemperatureCelsius()));
-                    ((TextView) view.findViewById(R.id.latest_salinity)).setText(String.valueOf(latestRecord.getSalinity()));
-                    ((TextView) view.findViewById(R.id.norecord)).setVisibility(View.GONE);
+                ((TextView) view.findViewById(R.id.latest_date)).setText(TimestampToDate.getDate(latestRecord.getTimestamp()));
+                ((TextView) view.findViewById(R.id.latest_ph)).setText(String.valueOf(latestRecord.getPh_level()));
+                ((TextView) view.findViewById(R.id.latest_dolevel)).setText(String.format("%.2f", latestRecord.getDo_level()));
+                ((TextView) view.findViewById(R.id.latest_temperature)).setText(String.format("%.2f", latestRecord.getTemperatureCelsius()));
+                ((TextView) view.findViewById(R.id.latest_salinity)).setText(String.valueOf(latestRecord.getSalinity()));
+                ((TextView) view.findViewById(R.id.norecord)).setVisibility(View.GONE);
 
-                    profileAdapter = new ProfileAdapter(view.getContext(), recordList, ProfileFragment.this);
+                profileAdapter = new ProfileAdapter(view.getContext(), recordList, ProfileFragment.this);
 
-                    recyclerView.setHasFixedSize(true);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
 
-                    recyclerView.setAdapter(profileAdapter);
+                recyclerView.setAdapter(profileAdapter);
 
-                    short temp = RecordData.checkTemp(latestRecord.getTemperature());
-                    short ph = RecordData.checkPh(latestRecord.getPh_level());
-                    short sal = RecordData.checkSalinity(latestRecord.getSalinity());
-                    short DO = RecordData.checkDo(latestRecord.getDo_level());
-                    if(temp != -1)
-                        dataList.add(new DataAnalysis(temp));
-                    if(ph != -1)
-                        dataList.add(new DataAnalysis(ph));
-                    if(sal != -1)
-                        dataList.add(new DataAnalysis(sal));
-                    if(DO != -1)
-                        dataList.add(new DataAnalysis(DO));
+                short temp = RecordData.checkTemp(latestRecord.getTemperature());
+                short ph = RecordData.checkPh(latestRecord.getPh_level());
+                short sal = RecordData.checkSalinity(latestRecord.getSalinity());
+                short DO = RecordData.checkDo(latestRecord.getDo_level());
+                if (temp != -1)
+                    dataList.add(new DataAnalysis(temp));
+                if (ph != -1)
+                    dataList.add(new DataAnalysis(ph));
+                if (sal != -1)
+                    dataList.add(new DataAnalysis(sal));
+                if (DO != -1)
+                    dataList.add(new DataAnalysis(DO));
 
-                    if(dataList.isEmpty())
-                        ((ImageView) view.findViewById(R.id.data_error)).setVisibility(View.GONE);
-                    else
-                        ((ImageView) view.findViewById(R.id.data_error)).setVisibility(View.VISIBLE);
+                if (dataList.isEmpty())
+                    ((ImageView) view.findViewById(R.id.data_error)).setVisibility(View.GONE);
+                else
+                    ((ImageView) view.findViewById(R.id.data_error)).setVisibility(View.VISIBLE);
 
-                    AnalysisAdapter analysisAdapter = new AnalysisAdapter(view.getContext(), dataList);
+                AnalysisAdapter analysisAdapter = new AnalysisAdapter(view.getContext(), dataList);
 
-                    recyclerView2.setHasFixedSize(true);
-                    recyclerView2.setLayoutManager(new LinearLayoutManager(view.getContext()));
+                recyclerView2.setHasFixedSize(true);
+                recyclerView2.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-                    recyclerView2.setAdapter(analysisAdapter);
-                }
+                recyclerView2.setAdapter(analysisAdapter);
+
             }
         };
 
         operatorListListener = new OperatorListListener() {
             @Override
             public void onGetList(int count) {
-                getTableData();
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("fishpond_box");
+                DatabaseUtil.readDataByKey(Long.toString(operator.getFla_number()), ref, new OnGetDataListener() {
+                    @Override
+                    public void dataRetrieved(DataSnapshot dataSnapshot) {
+                        boxes = new FishpondBoxes((Map<String, Object>) dataSnapshot.getValue());
+
+                        List<String> spinnerArray = new ArrayList<>();
+                        for (int i = 0; i < operator.getBoxes(); i++) {
+                            spinnerArray.add(boxes.getBox(i));
+                        }
+                        switch ((int) operator.getBoxes()) {
+                            case 1:
+                                box1.setText("Box 1 Sim: " + boxes.getBox1_sim());
+                                box1.setVisibility(View.VISIBLE);
+                                break;
+                            case 2:
+                                box1.setText("Box 1 Sim: " + boxes.getBox1_sim());
+                                box2.setText("Box 2 Sim: " + boxes.getBox2_sim());
+                                box1.setVisibility(View.VISIBLE);
+                                box2.setVisibility(View.VISIBLE);
+                                break;
+                            case 3:
+                                box1.setText("Box 1 Sim: " + boxes.getBox1_sim());
+                                box2.setText("Box 2 Sim: " + boxes.getBox2_sim());
+                                box3.setText("Box 3 Sim: " + boxes.getBox3_sim());
+                                box1.setVisibility(View.VISIBLE);
+                                box2.setVisibility(View.VISIBLE);
+                                box3.setVisibility(View.VISIBLE);
+                                break;
+                            case 4:
+                                box1.setText("Box 1 Sim: " + boxes.getBox1_sim());
+                                box2.setText("Box 2 Sim: " + boxes.getBox2_sim());
+                                box3.setText("Box 3 Sim: " + boxes.getBox3_sim());
+                                box4.setText("Box 4 Sim: " + boxes.getBox4_sim());
+                                box1.setVisibility(View.VISIBLE);
+                                box2.setVisibility(View.VISIBLE);
+                                box3.setVisibility(View.VISIBLE);
+                                box4.setVisibility(View.VISIBLE);
+                                break;
+                            case 5:
+                                box1.setText("Box 1 Sim: " + boxes.getBox1_sim());
+                                box2.setText("Box 2 Sim: " + boxes.getBox2_sim());
+                                box3.setText("Box 3 Sim: " + boxes.getBox3_sim());
+                                box4.setText("Box 4 Sim: " + boxes.getBox4_sim());
+                                box5.setText("Box 5 Sim: " + boxes.getBox5_sim());
+                                box1.setVisibility(View.VISIBLE);
+                                box2.setVisibility(View.VISIBLE);
+                                box3.setVisibility(View.VISIBLE);
+                                box4.setVisibility(View.VISIBLE);
+                                box5.setVisibility(View.VISIBLE);
+                                break;
+                            case 6:
+                                box1.setText("Box 1 Sim: " + boxes.getBox1_sim());
+                                box2.setText("Box 2 Sim: " + boxes.getBox2_sim());
+                                box3.setText("Box 3 Sim: " + boxes.getBox3_sim());
+                                box4.setText("Box 4 Sim: " + boxes.getBox4_sim());
+                                box5.setText("Box 5 Sim: " + boxes.getBox5_sim());
+                                box6.setText("Box 6 Sim: " + boxes.getBox6_sim());
+                                box1.setVisibility(View.VISIBLE);
+                                box2.setVisibility(View.VISIBLE);
+                                box3.setVisibility(View.VISIBLE);
+                                box4.setVisibility(View.VISIBLE);
+                                box5.setVisibility(View.VISIBLE);
+                                box6.setVisibility(View.VISIBLE);
+                                break;
+                            case 7:
+                                box1.setText("Box 1 Sim: " + boxes.getBox1_sim());
+                                box2.setText("Box 2 Sim: " + boxes.getBox2_sim());
+                                box3.setText("Box 3 Sim: " + boxes.getBox3_sim());
+                                box4.setText("Box 4 Sim: " + boxes.getBox4_sim());
+                                box5.setText("Box 5 Sim: " + boxes.getBox5_sim());
+                                box6.setText("Box 6 Sim: " + boxes.getBox6_sim());
+                                box7.setText("Box 7 Sim: " + boxes.getBox7_sim());
+                                box1.setVisibility(View.VISIBLE);
+                                box2.setVisibility(View.VISIBLE);
+                                box3.setVisibility(View.VISIBLE);
+                                box4.setVisibility(View.VISIBLE);
+                                box5.setVisibility(View.VISIBLE);
+                                box6.setVisibility(View.VISIBLE);
+                                box7.setVisibility(View.VISIBLE);
+                                break;
+                            case 8:
+                                box1.setText("Box 1 Sim: " + boxes.getBox1_sim());
+                                box2.setText("Box 2 Sim: " + boxes.getBox2_sim());
+                                box3.setText("Box 3 Sim: " + boxes.getBox3_sim());
+                                box4.setText("Box 4 Sim: " + boxes.getBox4_sim());
+                                box5.setText("Box 5 Sim: " + boxes.getBox5_sim());
+                                box6.setText("Box 6 Sim: " + boxes.getBox6_sim());
+                                box7.setText("Box 7 Sim: " + boxes.getBox7_sim());
+                                box8.setText("Box 8 Sim: " + boxes.getBox8_sim());
+                                box1.setVisibility(View.VISIBLE);
+                                box2.setVisibility(View.VISIBLE);
+                                box3.setVisibility(View.VISIBLE);
+                                box4.setVisibility(View.VISIBLE);
+                                box5.setVisibility(View.VISIBLE);
+                                box6.setVisibility(View.VISIBLE);
+                                box7.setVisibility(View.VISIBLE);
+                                box8.setVisibility(View.VISIBLE);
+                                break;
+                            case 9:
+                                box1.setText("Box 1 Sim: " + boxes.getBox1_sim());
+                                box2.setText("Box 2 Sim: " + boxes.getBox2_sim());
+                                box3.setText("Box 3 Sim: " + boxes.getBox3_sim());
+                                box4.setText("Box 4 Sim: " + boxes.getBox4_sim());
+                                box5.setText("Box 5 Sim: " + boxes.getBox5_sim());
+                                box6.setText("Box 6 Sim: " + boxes.getBox6_sim());
+                                box7.setText("Box 7 Sim: " + boxes.getBox7_sim());
+                                box8.setText("Box 8 Sim: " + boxes.getBox8_sim());
+                                box9.setText("Box 9 Sim: " + boxes.getBox9_sim());
+                                box1.setVisibility(View.VISIBLE);
+                                box2.setVisibility(View.VISIBLE);
+                                box3.setVisibility(View.VISIBLE);
+                                box4.setVisibility(View.VISIBLE);
+                                box5.setVisibility(View.VISIBLE);
+                                box6.setVisibility(View.VISIBLE);
+                                box7.setVisibility(View.VISIBLE);
+                                box8.setVisibility(View.VISIBLE);
+                                box9.setVisibility(View.VISIBLE);
+                                break;
+                            case 10:
+                                box1.setText("Box 1 Sim: " + boxes.getBox1_sim());
+                                box2.setText("Box 2 Sim: " + boxes.getBox2_sim());
+                                box3.setText("Box 3 Sim: " + boxes.getBox3_sim());
+                                box4.setText("Box 4 Sim: " + boxes.getBox4_sim());
+                                box5.setText("Box 5 Sim: " + boxes.getBox5_sim());
+                                box6.setText("Box 6 Sim: " + boxes.getBox6_sim());
+                                box7.setText("Box 7 Sim: " + boxes.getBox7_sim());
+                                box8.setText("Box 8 Sim: " + boxes.getBox8_sim());
+                                box9.setText("Box 9 Sim: " + boxes.getBox9_sim());
+                                box10.setText("Box 10 Sim: " + boxes.getBox10_sim());
+                                box1.setVisibility(View.VISIBLE);
+                                box2.setVisibility(View.VISIBLE);
+                                box3.setVisibility(View.VISIBLE);
+                                box4.setVisibility(View.VISIBLE);
+                                box5.setVisibility(View.VISIBLE);
+                                box6.setVisibility(View.VISIBLE);
+                                box7.setVisibility(View.VISIBLE);
+                                box8.setVisibility(View.VISIBLE);
+                                box9.setVisibility(View.VISIBLE);
+                                box10.setVisibility(View.VISIBLE);
+                                break;
+                        }
+                        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, spinnerArray);
+                        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinner.setAdapter(spinnerAdapter);
+                        getTableData();
+                    }
+
+                    @Override
+                    public void dataExists(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+                });
             }
         };
 
     }
 
-    private void getTableData(){
+    private void getTableData() {
         recordList = new ArrayList<>();
         DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().child("fishpond_record");
-        Query query = ref2.orderByChild("sim_number").equalTo(operator.getSim2());
+        Query query = ref2.orderByChild("sim_number").equalTo(spinner.getSelectedItem().toString());
         query.keepSynced(true);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot snap : snapshot.getChildren()){
+                for (DataSnapshot snap : snapshot.getChildren()) {
                     recordList.add(snap.getValue(FishpondRecord.class));
                 }
-                if(!recordList.isEmpty()) {
-                    ((TextView)view.findViewById(R.id.no_data)).setVisibility(View.GONE);
+                if (!recordList.isEmpty()) {
+                    ((TextView) view.findViewById(R.id.no_data)).setVisibility(View.GONE);
                     latestRecord = recordList.get(0);
                     if (recordList.size() > 1) {
                         try {
@@ -382,15 +586,21 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, P
                         }
                     }
                     latestRecord = recordList.get(0);
-                    ((TextView) view.findViewById(R.id.fishpond_data)).setText("Fishpond Data from " + operator.getSim2());
+                    ((TextView) view.findViewById(R.id.fishpond_data)).setText("Fishpond Data from " + spinner.getSelectedItem().toString());
                     ((TextView) view.findViewById(R.id.data_analysis)).setText("Data Analysis on\n" + TimestampToDate.getDate(latestRecord.getTimestamp()));
                     profileListListener.onGetList(count1++);
-                }
-                else {
+                } else {
                     table.setVisibility(View.GONE);
-                    ((TextView)view.findViewById(R.id.no_data)).setVisibility(View.VISIBLE);
-                    ((TextView)view.findViewById(R.id.norecord)).setVisibility(View.VISIBLE);
-                    ((TextView)view.findViewById(R.id.norecord)).setText("No Record From Sim\n" + operator.getSim2());
+                    ((TextView) view.findViewById(R.id.fishpond_data)).setText("Fishpond Data from " + spinner.getSelectedItem().toString());
+                    ((TextView) view.findViewById(R.id.no_data)).setVisibility(View.VISIBLE);
+                    ((TextView) view.findViewById(R.id.norecord)).setVisibility(View.VISIBLE);
+                    ((TextView) view.findViewById(R.id.norecord)).setText("No Record From Sim\n" + spinner.getSelectedItem().toString());
+
+                    ((TextView) view.findViewById(R.id.latest_date)).setText(null);
+                    ((TextView) view.findViewById(R.id.latest_ph)).setText(null);
+                    ((TextView) view.findViewById(R.id.latest_dolevel)).setText(null);
+                    ((TextView) view.findViewById(R.id.latest_temperature)).setText(null);
+                    ((TextView) view.findViewById(R.id.latest_salinity)).setText(null);
                 }
 
             }
@@ -404,7 +614,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, P
 
     @Override
     public void onClick(View view) {
-        if(!expandableLayout.isExpanded())
+        if (!expandableLayout.isExpanded())
             expandableLayout.expand();
         else
             expandableLayout.collapse();

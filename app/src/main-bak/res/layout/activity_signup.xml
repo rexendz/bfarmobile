@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/signup_layout"
+    android:background="@drawable/gradient_animation"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.SignupActivity">
+
+    <ScrollView
+        android:layout_width="380dp"
+        android:layout_height="600dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="380dp"
+            android:layout_height="600dp"
+            android:background="@drawable/layout_bg">
+
+            <EditText
+                android:id="@+id/field_middlename"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:fontFamily="@font/product_sans"
+                android:inputType="textPersonName"
+                android:textColor="@color/colorPrimaryText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+            <TextView
+                android:id="@+id/textView31"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/product_sans"
+                android:text="Last Name"
+                android:textAllCaps="false"
+                android:textSize="10sp"
+                app:layout_constraintStart_toStartOf="@+id/field_lastname"
+                app:layout_constraintTop_toBottomOf="@+id/field_middlename" />
+
+            <EditText
+                android:id="@+id/field_lastname"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:fontFamily="@font/product_sans"
+                android:inputType="textPersonName"
+                android:textColor="@color/colorPrimaryText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView31" />
+
+            <EditText
+                android:id="@+id/field_user"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:fontFamily="@font/product_sans"
+                android:inputType="textPersonName"
+                android:textColor="@color/colorPrimaryText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="23dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="60dp"
+                android:layout_marginLeft="60dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/field_cpass"
+                app:srcCompat="@android:drawable/ic_menu_info_details" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="230dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/product_sans"
+                android:gravity="center"
+                android:text="@string/activation_notice"
+                android:textColor="#757575"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toBottomOf="@+id/field_cpass" />
+
+            <Button
+                android:id="@+id/button_cancel"
+                android:layout_width="90dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="64dp"
+                android:layout_marginLeft="64dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/button_gray"
+                android:fontFamily="@font/product_sans"
+                android:onClick="cancel_action"
+                android:text="Cancel"
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+            <EditText
+                android:id="@+id/field_firstname"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:fontFamily="@font/product_sans"
+                android:inputType="textPersonName"
+                android:textColor="@color/colorPrimaryText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/product_sans"
+                android:text="Middle Name"
+                android:textAllCaps="false"
+                android:textSize="10sp"
+                app:layout_constraintStart_toStartOf="@+id/field_middlename"
+                app:layout_constraintTop_toBottomOf="@+id/field_firstname" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/product_sans_bold"
+                android:text="SIGN UP"
+                android:textColor="@color/colorPrimaryBlue"
+                android:textSize="32sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="65dp"
+                android:layout_marginLeft="80dp"
+                android:layout_marginTop="32dp"
+                android:fontFamily="@font/product_sans"
+                android:text="Username"
+                android:textAllCaps="false"
+                android:textSize="10sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/field_sim2" />
+
+            <EditText
+                android:id="@+id/field_fla"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:enabled="false"
+                android:fontFamily="@font/product_sans"
+                android:inputType="number"
+                android:textColor="@color/colorPrimaryText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+            <TextView
+                android:id="@+id/textView29"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="65dp"
+                android:layout_marginLeft="65dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/product_sans"
+                android:text="Operator Sim 2 (Fishpond)"
+                android:textAllCaps="false"
+                android:textSize="10sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/field_sim1" />
+
+            <TextView
+                android:id="@+id/textView32"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="65dp"
+                android:layout_marginLeft="65dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/product_sans"
+                android:text="Operator Sim 1 (Main Hub)"
+                android:textAllCaps="false"
+                android:textSize="10sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/field_fla" />
+
+            <net.rimoto.intlphoneinput.IntlPhoneInput
+                android:id="@+id/field_sim1"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:enabled="false"
+                android:fontFamily="@font/product_sans"
+                android:hint="Operator Sim 1 (Main Hub)"
+                android:inputType="phone"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView32" />
+
+            <net.rimoto.intlphoneinput.IntlPhoneInput
+                android:id="@+id/field_sim2"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:enabled="false"
+                android:fontFamily="@font/product_sans"
+                android:hint="Operator Sim 2 (Fishpond)"
+                android:inputType="phone"
+                android:textColor="@color/colorPrimaryText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView29" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="65dp"
+                android:layout_marginLeft="80dp"
+                android:fontFamily="@font/product_sans"
+                android:text="Confirm Password"
+                android:textAllCaps="false"
+                android:textSize="10sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/field_pass" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="32dp"
+                android:fontFamily="@font/product_sans"
+                android:text="First Name"
+                android:textAllCaps="false"
+                android:textSize="10sp"
+                app:layout_constraintStart_toStartOf="@+id/field_firstname"
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+            <EditText
+                android:id="@+id/field_cpass"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:fontFamily="@font/product_sans"
+                android:inputType="textPassword"
+                android:textColor="@color/colorPrimaryText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="65dp"
+                android:layout_marginLeft="80dp"
+                android:fontFamily="@font/product_sans"
+                android:text="Password"
+                android:textAllCaps="false"
+                android:textSize="10sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/field_user" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/product_sans"
+                android:text="FLA #"
+                android:textAllCaps="false"
+                android:textSize="10sp"
+                app:layout_constraintStart_toStartOf="@+id/field_fla"
+                app:layout_constraintTop_toBottomOf="@+id/switch1" />
+
+            <EditText
+                android:id="@+id/field_pass"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:fontFamily="@font/product_sans"
+                android:inputType="textPassword"
+                android:textColor="@color/colorPrimaryText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+            <Button
+                android:id="@+id/button_signup"
+                android:layout_width="140dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/button_primaryblue"
+                android:fontFamily="@font/product_sans"
+                android:onClick="signup_action"
+                android:text="Sign-up"
+                android:textColor="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.285"
+                app:layout_constraintStart_toEndOf="@+id/button_cancel"
+                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/layout_rounded"
+                android:fontFamily="@font/product_sans"
+                android:gravity="center"
+                android:text="Operator Account"
+                android:textColor="#757575"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/field_lastname" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

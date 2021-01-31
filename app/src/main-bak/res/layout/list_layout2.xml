@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:titleEnabled="false">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:titleEnabled="false">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/acc_name"
+                android:layout_width="364dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/acc_status2"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/product_sans"
+                android:text="Name:"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/acc_status"
+                android:layout_width="76dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="305dp"
+                android:background="@color/colorExpired"
+                android:fontFamily="@font/product_sans"
+                android:gravity="center_horizontal"
+                android:text="PENDING"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/acc_status2"
+                android:layout_width="76dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/colorAdmin"
+                android:fontFamily="@font/product_sans"
+                android:gravity="center_horizontal"
+                android:text="ADMIN"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/acc_status3"
+                android:layout_width="76dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="64dp"
+                android:layout_marginLeft="48dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="64dp"
+                android:layout_toStartOf="@+id/acc_status"
+                android:layout_toLeftOf="@+id/acc_status"
+                android:layout_toEndOf="@+id/acc_status2"
+                android:layout_toRightOf="@+id/acc_status2"
+                android:background="@color/colorOperator"
+                android:fontFamily="@font/product_sans"
+                android:gravity="center_horizontal"
+                android:text="OPERATOR"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/acc_username"
+                android:layout_width="364dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/acc_name"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/product_sans"
+                android:text="Username:"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="#000000" />
+
+            <Button
+                android:id="@+id/button_left"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/acc_username"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/button_primaryred"
+                android:fontFamily="@font/product_sans"
+                android:text="Deactivate Account"
+                android:textColor="#FFFFFF"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/button_right"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/acc_username"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/button_primaryblue"
+                android:fontFamily="@font/product_sans"
+                android:text="Remove as Admin"
+                android:textColor="#FFFFFF"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+    <net.cachapa.expandablelayout.ExpandableLayout
+        android:id="@+id/expandable_layout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:el_expanded="false">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="5dp" >
+        <LinearLayout
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/activated_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/product_sans"
+                android:text="Activated By: "
+                android:textColor="#000000"
+                android:layout_marginLeft="12dp" />
+                <TextView
+                    android:id="@+id/account_activated_by"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/product_sans"
+                    android:text="elmer"
+                    android:textColor="#000000"
+                    android:layout_marginLeft="4dp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/madeadmin_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/product_sans"
+                    android:text="Made Admin By: "
+                    android:textColor="#000000"
+                    android:layout_marginLeft="12dp" />
+                <TextView
+                    android:id="@+id/account_madeadmin_by"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/product_sans"
+                    android:text="elmer"
+                    android:textColor="#000000"
+                    android:layout_marginLeft="4dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/deactivated_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/product_sans"
+                    android:text="Deactivated By: "
+                    android:textColor="#000000"
+                    android:layout_marginLeft="12dp" />
+                <TextView
+                    android:id="@+id/account_deactivated_by"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/product_sans"
+                    android:text="elmer"
+                    android:textColor="#000000"
+                    android:layout_marginLeft="4dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/removedadmin_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/product_sans"
+                    android:text="Removed Admin By: "
+                    android:textColor="#000000"
+                    android:layout_marginLeft="12dp" />
+                <TextView
+                    android:id="@+id/account_removedadmin_by"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/product_sans"
+                    android:text="elmer"
+                    android:textColor="#000000"
+                    android:layout_marginLeft="4dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fla_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/product_sans"
+                    android:text="FLA #: "
+                    android:textColor="#000000"
+                    android:layout_marginLeft="12dp" />
+                <TextView
+                    android:id="@+id/account_fla"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/product_sans"
+                    android:text="123"
+                    android:textColor="#000000"
+                    android:layout_marginLeft="4dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sim1_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/product_sans"
+                    android:text="SIM 1 (Main): "
+                    android:textColor="#000000"
+                    android:layout_marginLeft="12dp" />
+                <TextView
+                    android:id="@+id/account_sim1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/product_sans"
+                    android:text="+639051234567"
+                    android:textColor="#000000"
+                    android:layout_marginLeft="4dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sim2_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/product_sans"
+                    android:text="SIM 2 (Fishpond): "
+                    android:textColor="#000000"
+                    android:layout_marginLeft="12dp" />
+                <TextView
+                    android:id="@+id/account_sim2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/product_sans"
+                    android:text="+639051234567"
+                    android:textColor="#000000"
+                    android:layout_marginLeft="4dp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+    </net.cachapa.expandablelayout.ExpandableLayout>
+
+</LinearLayout>

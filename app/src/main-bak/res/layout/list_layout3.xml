@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:titleEnabled="false">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:stretchColumns="0, 1, 2, 3, 4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TableRow
+        android:id="@+id/row_data"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <TextView
+            android:id="@+id/row_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:fontFamily="@font/product_sans"
+            android:text="02/25/2020 | 23:59:12"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/row_ph"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="2"
+            android:fontFamily="@font/product_sans"
+            android:text="12.5"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/row_salinity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="3"
+            android:fontFamily="@font/product_sans"
+            android:text="16.2"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/row_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="4"
+            android:fontFamily="@font/product_sans"
+            android:text="36.6"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/row_dolevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="5"
+            android:fontFamily="@font/product_sans"
+            android:text="11.12"
+            android:textSize="12sp" />
+
+    </TableRow>
+        <TableRow
+            android:visibility="invisible"
+            android:background="@color/colorOperator"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:text="Date/Time"
+                android:textSize="12sp"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/product_sans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1" />
+
+            <TextView
+                android:text="PH Level"
+                android:textSize="12sp"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/product_sans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="2" />
+
+            <TextView
+                android:text="Salinity"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:fontFamily="@font/product_sans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="3" />
+
+            <TextView
+                android:text="Temperature"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:fontFamily="@font/product_sans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="4" />
+
+            <TextView
+                android:text="DO Level"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/product_sans"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="5" />
+
+        </TableRow>
+
+
+    </TableLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
