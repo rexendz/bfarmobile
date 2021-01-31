@@ -72,6 +72,7 @@ public class SignupActivity extends AppCompatActivity {
                 operator = b;
 
                 fla.setEnabled(b);
+                sim1.setEnabled(b);
 
                 if (!b) {
                     fla.setText(null);
