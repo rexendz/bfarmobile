@@ -52,6 +52,27 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
     @Override
     public void onBindViewHolder(@NonNull ProfileViewHolder holder, int position) {
         FishpondRecord record = recordList.get(position);
+        short a = RecordData.checkTemp(record.getTemperatureCelsius());
+        short b = RecordData.checkPh(record.getPh_level());
+        short c = RecordData.checkSalinity(record.getSalinity());
+        short d = RecordData.checkDo(record.getDo_level());
+        if (a != -1)
+            holder.row_temperature.setTextColor(Color.RED);
+        else
+            holder.row_temperature.setTextColor(Color.BLACK);
+        if (b != -1)
+            holder.row_ph.setTextColor(Color.RED);
+        else
+            holder.row_ph.setTextColor(Color.BLACK);
+        if (c != -1)
+            holder.row_salinity.setTextColor(Color.RED);
+        else
+            holder.row_salinity.setTextColor(Color.BLACK);
+        if (d != -1)
+            holder.row_dolevel.setTextColor(Color.RED);
+        else
+            holder.row_dolevel.setTextColor(Color.BLACK);
+
         holder.itemView.setBackgroundColor(selectedPos == position ? Color.GREEN : Color.TRANSPARENT); ;
         holder.row_date.setText(TimestampToDate.getDate(record.getTimestamp()));
         holder.row_dolevel.setText(String.format("%.2f", record.getDo_level()));
